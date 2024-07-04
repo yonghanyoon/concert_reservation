@@ -57,7 +57,7 @@
   &emsp;totalPrice : Long, // 결제 가격   
   &emsp;reservationExpiry : LocalDateTime // 임시 예약 만료 시간   
   }
-### 5. 잔액 충전 API POST /api/payment/charge
+### 5. 잔액 충전 API PATCH /api/payment/charge
 ##### Request
 - userId : Long
 - amount : Long
