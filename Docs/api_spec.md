@@ -6,7 +6,7 @@
 - code : 200
 - desc : 성공
 - data : {   
-  &emsp;user_uuid : String, // 토큰   
+  &emsp;uuid : String, // 토큰   
   }
 ### 2. 유저 대기열 확인 API GET /api/auth/token
 ##### Request
