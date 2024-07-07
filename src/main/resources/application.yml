@@ -1,12 +1,29 @@
 spring:
   application:
     name: concert
-
-#  jpa:
-#    database-platform: org.hibernate.dialect.H2Dialect
-#    hibernate:
-#      ddl-auto: create
-#    properties:
-#      hibernate:
-#        format_sql: true
-#    defer-datasource-initialization: true
+  datasource:
+    url: >
+      jdbc:mysql://localhost:3306/CONCERT? 
+      useSSL=false
+      &rewriteBatchedStatements=true
+      &allowPublicKeyRetrieval=true
+      &serverTimezone=Asia/Seoul
+      &characterEncoding=UTF-8
+      &rewriteBatchedStatements=true
+      &profileSQL=true
+      &logger=Slf4JLogger
+      &maxQuerySizeToLog=999999
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: dydgks132!
+  # jpa configuration
+  jpa:
+    database: mysql
+    database-platform: com.hhplus.concert.configuration.MysqlCustomDialect
+    open-in-view: true
+    hibernate:
+      ddl-auto: validate
+      naming:
+        # JPA 기본 매핑전략을 변경해줌. (대문자 컬럼 바인딩)
+        # JPA의 기본 매핑 전략 : 모든 도트는 밑줄로 대체, Camel Case 대문자는 밑줄로 대체, 모든 테이블은 소문자로 구성.
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
