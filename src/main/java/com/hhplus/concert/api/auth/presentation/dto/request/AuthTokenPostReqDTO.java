@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.balance.presentation.dto.request;
+package com.hhplus.concert.api.auth.presentation.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -11,10 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class ChargeReqVo {
+public class AuthTokenPostReqDTO {
     @Positive
     @NotNull(message = "userId는 null일 수 없습니다.")
     private Long userId;
-    @Positive
-    private Long amount;
 }

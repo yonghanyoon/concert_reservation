@@ -19,7 +19,7 @@ spring:
   # jpa configuration
   jpa:
     database: mysql
-    database-platform: com.hhplus.concert.configuration.MysqlCustomDialect
+    database-platform: com.hhplus.concert.config.MysqlCustomDialect
     open-in-view: true
     hibernate:
       ddl-auto: validate
@@ -27,3 +27,28 @@ spring:
         # JPA 기본 매핑전략을 변경해줌. (대문자 컬럼 바인딩)
         # JPA의 기본 매핑 전략 : 모든 도트는 밑줄로 대체, Camel Case 대문자는 밑줄로 대체, 모든 테이블은 소문자로 구성.
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+springdoc:
+  version: v1 # API 문서 버전
+  api-docs:
+    groups:
+      enabled: true # 그룹 설정 활성화 여부
+    enabled: true # swagger display enabled
+  default-consumes-media-type: application/json # 기본 consume media type
+  default-produces-media-type: application/json # 기본 produce media type
+  cache:
+    disabled: true # swagger cache 설정
+  show-actuator: true
+  swagger-ui:
+    operations-sorter: method # alpha(알파벳 오름차순), method(HTTP메소드순)
+    tags-sorter: alpha # 태그 정렬 기준
+    path: /swagger-ui.html # html 문서 접속 경로
+    disable-swagger-default-url: true # swagger-ui default url인 petstore html 문서 비활성화 여부
+    enabled: true # swagger ui 사용여부 (굳이 설정하지 않아도 default는 true)
+    display-request-duration: true  # try it out 을 했을 때 request duration 을 추가로 찍어줌
+    display-query-params-without-oauth2: true
+    doc-expansion: list
+    groups-order: asc
+
+server:
+  port: 8080
