@@ -35,6 +35,7 @@ public class ConcertControllerTest {
     public void getSchedulesTest() throws Exception {
         // given
         Long concertId = 1L;
+        String uuid = "011b60f5-dfd9-4975-9a23-1ef9953c0c22";
         List<Schedule> schedules = new ArrayList<>();
         Schedule schedule = new Schedule();
         schedule.setScheduleId(1L);
@@ -44,7 +45,7 @@ public class ConcertControllerTest {
         schedules.add(schedule);
 
         // when
-        when(concertService.getSchedules(concertId)).thenReturn(schedules);
+        when(concertService.getSchedules(uuid, concertId)).thenReturn(schedules);
 
         // then
         mockMvc.perform(
@@ -62,6 +63,7 @@ public class ConcertControllerTest {
     public void getSeatsTest() throws Exception {
         // given
         Long scheduleId = 1L;
+        String uuid = "011b60f5-dfd9-4975-9a23-1ef9953c0c22";
         List<Seat> seats = new ArrayList<>();
         Seat seat = new Seat();
         seat.setSeatId(1L);
@@ -72,7 +74,7 @@ public class ConcertControllerTest {
         seats.add(seat);
 
         // when
-        when(concertService.getSeats(scheduleId)).thenReturn(seats);
+        when(concertService.getSeats(uuid, scheduleId)).thenReturn(seats);
 
         // then
         mockMvc.perform(
