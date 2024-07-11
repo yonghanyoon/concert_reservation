@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.concert.infrastructure.repository;
+package com.hhplus.concert.api.concert.domain.repository;
 
 import com.hhplus.concert.api.concert.domain.entity.Seat;
 import com.hhplus.concert.api.concert.domain.type.SeatStatus;
