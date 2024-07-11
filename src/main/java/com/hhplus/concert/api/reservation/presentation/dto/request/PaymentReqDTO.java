@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.payment.presentation.dto.request;
+package com.hhplus.concert.api.reservation.presentation.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class PaymentReqVo {
+public class PaymentReqDTO {
     private Long userId;
     private Long reservationId;
+    private Long amount;
 }

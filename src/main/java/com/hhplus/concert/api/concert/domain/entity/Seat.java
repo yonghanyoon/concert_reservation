@@ -34,6 +34,4 @@ public class Seat {
     private Long price;
     @Column(name = "USER_ID")
     private Long userId;
-    @Column(name = "RESERVATION_EXPIRY")
-    private LocalDateTime reservationExpiry;
 }

@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.payment.domain.type;
+package com.hhplus.concert.api.reservation.domain.type;
 
 import java.util.Arrays;
 import lombok.AllArgsConstructor;

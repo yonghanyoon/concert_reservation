@@ -1,7 +1,6 @@
-package com.hhplus.concert.api.reservation.domain;
+package com.hhplus.concert.api.reservation.domain.entity;
 
-import com.hhplus.concert.api.concert.domain.entity.Seat;
-import com.hhplus.concert.api.reservation.infrastructure.type.ReservationStatus;
+import com.hhplus.concert.api.reservation.domain.type.ReservationStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -13,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,12 +37,14 @@ public class Reservation {
     @Column(name = "SCHEDULE_ID")
     private Long scheduleId;
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SEAT_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private List<Seat> seats;
+    @JoinColumn(name = "RESERVATION_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private List<ReservationSeat> reservationSeats;
     @Column(name = "CONCERT_TITLE")
     private String concertTitle;
     @Column(name = "TOTAL_PRICE")
     private Long totalPrice;
     @Column(name = "RESERVATION_STATUS")
     private ReservationStatus reservationStatus;
+    @Column(name = "RESERVATION_EXPIRY")
+    private LocalDateTime reservationExpiry;
 }

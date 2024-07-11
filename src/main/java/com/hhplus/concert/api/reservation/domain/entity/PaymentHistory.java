@@ -1,6 +1,6 @@
-package com.hhplus.concert.api.payment.domain;
+package com.hhplus.concert.api.reservation.domain.entity;
 
-import com.hhplus.concert.api.payment.domain.type.PaymentStatus;
+import com.hhplus.concert.api.reservation.domain.type.PaymentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +26,8 @@ public class PaymentHistory {
     private Long paymentId;
     @Column(name = "RESERVATION_ID")
     private Long reservationId;
+    @Column(name = "USER_ID")
+    private Long userId;
     @Column(name = "AMOUNT")
     private Long amount;
     @Column(name = "PAYMENT_STATUS")

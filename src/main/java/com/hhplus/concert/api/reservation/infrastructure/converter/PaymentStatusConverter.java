@@ -1,6 +1,6 @@
-package com.hhplus.concert.api.payment.infrastructure.converter;
+package com.hhplus.concert.api.reservation.infrastructure.converter;
 
-import com.hhplus.concert.api.payment.domain.type.PaymentStatus;
+import com.hhplus.concert.api.reservation.domain.type.PaymentStatus;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.util.EnumSet;
