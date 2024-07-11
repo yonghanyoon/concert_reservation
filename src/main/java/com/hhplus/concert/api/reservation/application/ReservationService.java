@@ -13,11 +13,13 @@ import com.hhplus.concert.exception.list.CustomBadRequestException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class ReservationService {
 
     private final JpaReservationRepository jpaReservationRepository;
@@ -25,17 +27,6 @@ public class ReservationService {
     private final JpaPaymentHistoryRepository jpaPaymentHistoryRepository;
     private final AuthService authService;
     private final ConcertService concertService;
-
-    public ReservationService(JpaReservationRepository jpaReservationRepository,
-        JpaReservationSeatRepository jpaReservationSeatRepository,
-        JpaPaymentHistoryRepository jpaPaymentHistoryRepository, AuthService authService,
-        ConcertService concertService) {
-        this.jpaReservationRepository = jpaReservationRepository;
-        this.jpaReservationSeatRepository = jpaReservationSeatRepository;
-        this.jpaPaymentHistoryRepository = jpaPaymentHistoryRepository;
-        this.authService = authService;
-        this.concertService = concertService;
-    }
 
     @Transactional
     public Reservation postReservationSeat(String uuid, Reservation reservation) {

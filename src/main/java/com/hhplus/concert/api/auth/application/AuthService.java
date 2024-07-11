@@ -9,17 +9,15 @@ import com.hhplus.concert.exception.list.CustomNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
     private final JpaAuthRepository jpaAuthRepository;
-
-    public AuthService(JpaAuthRepository jpaAuthRepository) {
-        this.jpaAuthRepository = jpaAuthRepository;
-    }
 
     @Transactional
     public QueueToken saveToken(QueueToken queueToken) {

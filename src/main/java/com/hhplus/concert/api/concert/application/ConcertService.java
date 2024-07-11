@@ -11,25 +11,18 @@ import com.hhplus.concert.api.concert.domain.repository.JpaSeatRepository;
 import com.hhplus.concert.exception.list.CustomNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class ConcertService {
     private final JpaConcertRepository jpaConcertRepository;
     private final JpaScheduleRepository jpaScheduleRepository;
     private final JpaSeatRepository jpaSeatRepository;
     private final AuthService authService;
-
-    public ConcertService(JpaConcertRepository jpaConcertRepository, JpaScheduleRepository jpaScheduleRepository,
-        JpaSeatRepository jpaSeatRepository, AuthService authService) {
-        this.jpaConcertRepository = jpaConcertRepository;
-        this.jpaScheduleRepository = jpaScheduleRepository;
-        this.jpaSeatRepository = jpaSeatRepository;
-        this.authService = authService;
-    }
 
     @Transactional
     public List<Concert> getConcerts(String uuid) {

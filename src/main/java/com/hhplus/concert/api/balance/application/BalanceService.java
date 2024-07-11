@@ -4,18 +4,16 @@ import com.hhplus.concert.api.balance.domain.Balance;
 import com.hhplus.concert.api.balance.domain.JpaBalanceRepository;
 import com.hhplus.concert.exception.list.CustomNotFoundException;
 import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class BalanceService {
 
     private final JpaBalanceRepository jpaBalanceRepository;
-
-    public BalanceService(JpaBalanceRepository jpaBalanceRepository) {
-        this.jpaBalanceRepository = jpaBalanceRepository;
-    }
 
     @Transactional
     public Balance putCharge(Balance balance) {
