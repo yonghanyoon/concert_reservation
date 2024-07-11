@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class AuthTokenGetResDTO {
-    private Integer position;
+    private Long position;
     private TokenStatus tokenStatus;
     private LocalDateTime expirationTime;
 }

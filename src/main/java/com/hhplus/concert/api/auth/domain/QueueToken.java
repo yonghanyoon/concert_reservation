@@ -33,6 +33,8 @@ public class QueueToken {
     @Column(name = "EXPIRATION_TIME")
     private LocalDateTime expirationTime;
     @Column(name = "POSITION")
-    private Integer position;
+    private Long position;
+    @Column(name = "CREATE_DT")
+    private LocalDateTime createDt;
 
 }

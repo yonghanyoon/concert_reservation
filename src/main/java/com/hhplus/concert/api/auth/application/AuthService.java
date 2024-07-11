@@ -31,20 +31,22 @@ public class AuthService {
             queueToken.setTokenId(item.get().getTokenId());
         }
         queueToken.setTokenStatus(TokenStatus.RESERVED);
+            queueToken.setCreateDt(LocalDateTime.now());
         return authRepository.save(queueToken);
     }
 
     @Transactional
     public QueueToken getToken(String uuid) {
-        QueueToken queueToken = authRepository.findByUuidAndTokenStatus(uuid, TokenStatus.RESERVED).orElseThrow(() -> {
-            throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "해당 UUID는 존재하지 않습니다.");
-        });
-        List<QueueToken> queueTokens = authRepository.findAllByTokenStatusOrderByTokenIdDesc(TokenStatus.AVAILABLE);
-        if (queueTokens.size() >= 10) {
-            queueToken.setPosition((int) (queueToken.getTokenId() - queueTokens.stream().findFirst().get().getTokenId()));
+            QueueToken queueToken = authRepository.findByUuidAndTokenStatus(uuid, TokenStatus.RESERVED).orElseThrow(() -> {
+                throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "해당 UUID는 존재하지 않습니다.");
+            });
+        List<QueueToken> availableQueueTokens = authRepository.findAllByTokenStatusOrderByTokenIdDesc(TokenStatus.AVAILABLE);
+        if (availableQueueTokens.size() >= 10) {
+            Long position = authRepository.countAllByCreateDtBeforeAndTokenStatus(queueToken.getCreateDt(), TokenStatus.RESERVED) + 1;
+            queueToken.setPosition(position);
             return authRepository.save(queueToken);
         } else {
-            if (queueToken.getPosition() - 1 == 0) {
+            if (queueToken.getPosition() == 1) {
                 queueToken.setTokenStatus(TokenStatus.AVAILABLE);
                 queueToken.setPosition(null);
                 queueToken.setExpirationTime(LocalDateTime.now().plusMinutes(30));

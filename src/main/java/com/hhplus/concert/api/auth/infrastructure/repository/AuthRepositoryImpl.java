@@ -3,6 +3,7 @@ package com.hhplus.concert.api.auth.infrastructure.repository;
 import com.hhplus.concert.api.auth.domain.AuthRepository;
 import com.hhplus.concert.api.auth.domain.QueueToken;
 import com.hhplus.concert.api.auth.domain.type.TokenStatus;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,11 @@ public class AuthRepositoryImpl implements AuthRepository {
     @Override
     public List<QueueToken> findAllByTokenStatusOrderByTokenIdDesc(TokenStatus tokenStatus) {
         return jpaAuthRepository.findAllByTokenStatusOrderByTokenIdDesc(tokenStatus);
+    }
+
+    @Override
+    public Long countAllByCreateDtBeforeAndTokenStatus(LocalDateTime createDt,
+        TokenStatus tokenStatus) {
+        return jpaAuthRepository.countAllByCreateDtBeforeAndTokenStatus(createDt, tokenStatus);
     }
 }
