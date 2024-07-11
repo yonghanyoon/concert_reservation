@@ -49,6 +49,7 @@ springdoc:
     display-query-params-without-oauth2: true
     doc-expansion: list
     groups-order: asc
+  pre-loading-enabled: true
 
 server:
   port: 8080

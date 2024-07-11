@@ -8,8 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SeatStatus {
     AVAILABLE("1", "예약 가능"),
-    TEMPORARY("2", "임시 예약"),
-    BOOKED("3", "예약 완료");
+    IMPOSSIBLE("2", "예약 불가");
 
     private String code;
     private String desc;

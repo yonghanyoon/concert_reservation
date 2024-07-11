@@ -1,6 +1,7 @@
 package com.hhplus.concert.exception;
 
 import com.hhplus.concert.exception.list.CustomBadRequestException;
+import com.hhplus.concert.exception.list.CustomForbiddenException;
 import com.hhplus.concert.exception.list.CustomNotFoundException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -27,6 +28,12 @@ public class GlobalExceptionHandler {
                       .collect(Collectors.joining(",", "[", "]"));
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), error);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomForbiddenException.class)
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomForbiddenException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.FORBIDDEN.value(), ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(CustomBadRequestException.class)
