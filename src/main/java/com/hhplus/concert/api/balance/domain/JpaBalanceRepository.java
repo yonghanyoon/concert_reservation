@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.balance.infrastructure.repository;
+package com.hhplus.concert.api.balance.domain;
 
 import com.hhplus.concert.api.balance.domain.Balance;
 import java.util.Optional;
