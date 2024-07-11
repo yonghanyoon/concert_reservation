@@ -8,6 +8,8 @@
 -----
 ### [ApiSpecs](https://github.com/yonghanyoon/concert_reservation/blob/feature/concert/Docs/api_spec.md)
 -----
+### [Swagger](https://github.com/yonghanyoon/concert_reservation/blob/feature/concert/Docs/swagger.md)
+-----
 1️⃣ **`주요` 유저 대기열 토큰 기능**
 
 - 서비스를 이용할 토큰을 발급받는 API를 작성합니다.
