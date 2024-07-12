@@ -9,6 +9,7 @@ import com.hhplus.concert.exception.list.CustomNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,9 @@ public class AuthService {
             }
             queueToken.setTokenId(item.get().getTokenId());
         }
+        queueToken.setUuid(UUID.randomUUID().toString());
         queueToken.setTokenStatus(TokenStatus.RESERVED);
-            queueToken.setCreateDt(LocalDateTime.now());
+        queueToken.setCreateDt(LocalDateTime.now());
         return jpaAuthRepository.save(queueToken);
     }
 

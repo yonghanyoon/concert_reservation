@@ -14,7 +14,6 @@ public class QueueTokenMapper {
         }
         QueueToken queueToken = new QueueToken();
         queueToken.setUserId(dto.getUserId());
-        queueToken.setUuid(UUID.randomUUID().toString());
         return queueToken;
     }
 

@@ -8,6 +8,7 @@ import com.hhplus.concert.api.reservation.domain.entity.ReservationSeat;
 import com.hhplus.concert.api.reservation.domain.repository.JpaPaymentHistoryRepository;
 import com.hhplus.concert.api.reservation.domain.repository.JpaReservationRepository;
 import com.hhplus.concert.api.reservation.domain.repository.JpaReservationSeatRepository;
+import com.hhplus.concert.api.reservation.domain.type.PaymentStatus;
 import com.hhplus.concert.api.reservation.domain.type.ReservationStatus;
 import com.hhplus.concert.exception.list.CustomBadRequestException;
 import java.time.LocalDateTime;
@@ -37,7 +38,7 @@ public class ReservationService {
         List<Long> seatIds = reservation.getReservationSeats().stream().map(i -> i.getSeatId()).collect(
             Collectors.toList());
         reservation.setTotalPrice(concertService.getSeatTotalPrice(seatIds));
-        reservation = jpaReservationRepository.save(reservation);
+        jpaReservationRepository.save(reservation);
         List<ReservationSeat> reservationSeats = jpaReservationSeatRepository.findAllBySeatIdInAndScheduleIdAndConcertId(seatIds,
                                                                                                       reservation.getScheduleId(),
                                                                                                       reservation.getConcertId());
@@ -68,7 +69,9 @@ public class ReservationService {
             throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "예약 정보가 없습니다.");
         });
 
-        paymentHistory = jpaPaymentHistoryRepository.save(paymentHistory);
+        paymentHistory.setPaymentStatus(PaymentStatus.SUCCESS);
+        paymentHistory.setPaymentTime(LocalDateTime.now());
+        jpaPaymentHistoryRepository.save(paymentHistory);
         authService.tokenExpired(uuid);
 
         return paymentHistory;

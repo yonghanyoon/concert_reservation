@@ -58,8 +58,6 @@ public class ReservationMapper {
         paymentHistory.setReservationId(dto.getReservationId());
         paymentHistory.setUserId(dto.getUserId());
         paymentHistory.setAmount(dto.getAmount());
-        paymentHistory.setPaymentStatus(PaymentStatus.SUCCESS);
-        paymentHistory.setPaymentTime(LocalDateTime.now());
         return paymentHistory;
     }
 
