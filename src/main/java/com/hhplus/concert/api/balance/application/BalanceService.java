@@ -1,7 +1,7 @@
 package com.hhplus.concert.api.balance.application;
 
-import com.hhplus.concert.api.balance.domain.Balance;
-import com.hhplus.concert.api.balance.domain.JpaBalanceRepository;
+import com.hhplus.concert.api.balance.domain.entity.Balance;
+import com.hhplus.concert.api.balance.domain.repository.BalanceRepository;
 import com.hhplus.concert.exception.list.CustomNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -13,15 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BalanceService {
 
-    private final JpaBalanceRepository jpaBalanceRepository;
+    private final BalanceRepository jpaBalanceRepository;
 
     @Transactional
     public Balance putCharge(Balance balance) {
         Balance selectBalance = jpaBalanceRepository.findByUserId(balance.getUserId()).orElseThrow(() -> new CustomNotFoundException(
             HttpStatus.NOT_FOUND, "존재하지 않는 사용자"));
-        balance.setBalanceId(selectBalance.getBalanceId());
-        balance.setAmount(selectBalance.getAmount() + balance.getAmount());
-        balance.setModDt(LocalDateTime.now());
+        balance.putCharge(selectBalance.getBalanceId(), selectBalance.getAmount() + balance.getAmount(), LocalDateTime.now());
         return jpaBalanceRepository.save(balance);
     }
 

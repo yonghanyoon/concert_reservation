@@ -1,6 +1,6 @@
 package com.hhplus.concert.api.balance.presentation.mapper;
 
-import com.hhplus.concert.api.balance.domain.Balance;
+import com.hhplus.concert.api.balance.domain.entity.Balance;
 import com.hhplus.concert.api.balance.presentation.dto.request.ChargeReqVo;
 import com.hhplus.concert.api.balance.presentation.dto.response.BalanceResVo;
 
@@ -10,9 +10,10 @@ public class BalanceMapper {
         if (dto == null) {
             return null;
         }
-        Balance balance = new Balance();
-        balance.setUserId(dto.getUserId());
-        balance.setAmount(dto.getAmount());
+        Balance balance = new Balance().builder()
+            .userId(dto.getUserId())
+            .amount(dto.getAmount())
+            .build();
         return balance;
     }
 

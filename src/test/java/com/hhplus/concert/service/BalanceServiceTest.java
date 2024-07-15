@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import com.hhplus.concert.api.balance.application.BalanceService;
-import com.hhplus.concert.api.balance.domain.Balance;
+import com.hhplus.concert.api.balance.domain.entity.Balance;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

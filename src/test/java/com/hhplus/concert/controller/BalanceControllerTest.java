@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hhplus.concert.api.balance.application.BalanceService;
-import com.hhplus.concert.api.balance.domain.Balance;
+import com.hhplus.concert.api.balance.domain.entity.Balance;
 import com.hhplus.concert.api.balance.presentation.BalanceController;
 import com.hhplus.concert.api.balance.presentation.dto.request.ChargeReqVo;
 import org.junit.jupiter.api.DisplayName;

@@ -1,13 +1,13 @@
 package com.hhplus.concert.api.concert.application;
 
-import com.hhplus.concert.api.auth.application.AuthService;
+import com.hhplus.concert.api.token.application.TokenService;
 import com.hhplus.concert.api.concert.domain.entity.Concert;
 import com.hhplus.concert.api.concert.domain.entity.Schedule;
 import com.hhplus.concert.api.concert.domain.entity.Seat;
-import com.hhplus.concert.api.concert.domain.repository.JpaConcertRepository;
+import com.hhplus.concert.api.concert.domain.repository.ConcertRepository;
 import com.hhplus.concert.api.concert.domain.type.SeatStatus;
-import com.hhplus.concert.api.concert.domain.repository.JpaScheduleRepository;
-import com.hhplus.concert.api.concert.domain.repository.JpaSeatRepository;
+import com.hhplus.concert.api.concert.domain.repository.ScheduleRepository;
+import com.hhplus.concert.api.concert.domain.repository.SeatRepository;
 import com.hhplus.concert.exception.list.CustomNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,14 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ConcertService {
-    private final JpaConcertRepository jpaConcertRepository;
-    private final JpaScheduleRepository jpaScheduleRepository;
-    private final JpaSeatRepository jpaSeatRepository;
-    private final AuthService authService;
+    private final ConcertRepository jpaConcertRepository;
+    private final ScheduleRepository jpaScheduleRepository;
+    private final SeatRepository jpaSeatRepository;
+    private final TokenService tokenService;
 
     @Transactional
     public List<Concert> getConcerts(String uuid) {
-        authService.tokenStatusCheck(uuid);
+        tokenService.tokenStatusCheck(uuid);
 
         List<Concert> concerts = jpaConcertRepository.findAll();
         if (concerts.size() == 0) {
@@ -37,7 +37,7 @@ public class ConcertService {
 
     @Transactional
     public List<Schedule> getSchedules(String uuid, Long concertId) {
-        authService.tokenStatusCheck(uuid);
+        tokenService.tokenStatusCheck(uuid);
 
         List<Schedule> schedules = jpaScheduleRepository.findByConcertIdAndScheduleDateAfter(concertId, LocalDateTime.now());
         if (schedules.size() == 0) {
@@ -48,7 +48,7 @@ public class ConcertService {
 
     @Transactional
     public List<Seat> getSeats(String uuid, Long scheduleId) {
-        authService.tokenStatusCheck(uuid);
+        tokenService.tokenStatusCheck(uuid);
 
         List<Seat> seats = jpaSeatRepository.findByScheduleIdAndSeatStatus(scheduleId, SeatStatus.AVAILABLE);
         if (seats.size() == 0) {
