@@ -34,7 +34,8 @@ public class Seat {
     @Column(name = "USER_ID")
     private Long userId;
 
-    public void updateSeatImpossible(SeatStatus seatStatus) {
+    public void updateSeatStatus(SeatStatus seatStatus, Long userId) {
         this.seatStatus = seatStatus;
+        this.userId = userId;
     }
 }

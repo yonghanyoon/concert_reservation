@@ -1,6 +1,7 @@
 package com.hhplus.concert.api.reservation.application;
 
 import com.hhplus.concert.api.balance.application.BalanceService;
+import com.hhplus.concert.api.concert.domain.type.SeatStatus;
 import com.hhplus.concert.api.token.application.TokenService;
 import com.hhplus.concert.api.concert.application.ConcertService;
 import com.hhplus.concert.api.reservation.domain.entity.PaymentHistory;
@@ -13,6 +14,7 @@ import com.hhplus.concert.api.reservation.domain.type.PaymentStatus;
 import com.hhplus.concert.api.reservation.domain.type.ReservationStatus;
 import com.hhplus.concert.exception.list.CustomBadRequestException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +33,13 @@ public class ReservationService {
     private final ConcertService concertService;
     private final BalanceService balanceService;
 
+
     @Transactional
     public Reservation postReservationSeat(String uuid, Reservation reservation) {
-        tokenService.tokenStatusCheck(uuid);
         List<Long> seatIds = reservation.getReservationSeats().stream().map(i -> i.getSeatId()).collect(
             Collectors.toList());
         reservation.updateReservation(concertService.getConcertTitle(reservation.getConcertId()),
-                                      ReservationStatus.SUCCESS,
+                                      ReservationStatus.STANDBY,
                                       LocalDateTime.now().plusMinutes(10),
                                       concertService.getSeatTotalPrice(seatIds));
         reservationRepository.save(reservation);
@@ -54,13 +56,12 @@ public class ReservationService {
         }
         reservationSeatRepository.saveAll(reservationSeats);
 
-        concertService.seatStatusImpossible(seatIds);
+        concertService.seatStatusUpdate(seatIds, SeatStatus.IMPOSSIBLE, reservation.getUserId());
         return reservation;
     }
 
     @Transactional
     public PaymentHistory postPayment(String uuid, PaymentHistory paymentHistory) {
-        tokenService.tokenStatusCheck(uuid);
         reservationRepository.findByReservationIdAndUserId(
             paymentHistory.getReservationId(), paymentHistory.getUserId()).orElseThrow(() -> {
             throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "예약 정보가 없습니다.");
@@ -73,5 +74,18 @@ public class ReservationService {
         tokenService.tokenExpired(uuid);
 
         return paymentHistory;
+    }
+
+    @Transactional
+    public void reservationExpiredCheck() {
+        List<Reservation> expiredReservation = reservationRepository.findAllByReservationStatusAndReservationExpiryBefore(ReservationStatus.STANDBY, LocalDateTime.now());
+        if (expiredReservation.size() == 0) return;
+        List<Long> seats = new ArrayList<>();
+        for (Reservation reservation : expiredReservation) {
+            reservation.updateReservationStatus(ReservationStatus.CANCEL);
+            seats.addAll(reservation.getReservationSeats().stream().map(ReservationSeat::getSeatId).toList());
+        }
+        concertService.seatStatusUpdate(seats, SeatStatus.AVAILABLE, null);
+        reservationSeatRepository.deleteAllById(seats);
     }
 }
