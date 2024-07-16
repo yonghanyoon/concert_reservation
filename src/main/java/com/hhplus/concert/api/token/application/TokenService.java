@@ -18,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class TokenService {
-    private final QueueTokenRepository jpaAuthRepository;
+    private final QueueTokenRepository queueTokenRepository;
 
     @Transactional
     public QueueToken saveToken(QueueToken queueToken) {
-        Optional<QueueToken> item = jpaAuthRepository.findByUserId(queueToken.getUserId());
+        Optional<QueueToken> item = queueTokenRepository.findByUserId(queueToken.getUserId());
         if (item.isPresent()) {
             if (!item.get().getTokenStatus().equals(TokenStatus.EXPIRED)) {
                 throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "이미 토큰이 발급된 사용자");
@@ -30,20 +30,21 @@ public class TokenService {
             queueToken.createToken(item.get().getTokenId());
         }
         queueToken.reservedToken(UUID.randomUUID().toString(), TokenStatus.RESERVED, LocalDateTime.now());
-        return jpaAuthRepository.save(queueToken);
+        return queueTokenRepository.save(queueToken);
     }
 
     @Transactional
     public QueueToken getToken(String uuid) {
-            QueueToken queueToken = jpaAuthRepository.findByUuidAndTokenStatus(uuid, TokenStatus.RESERVED).orElseThrow(() -> {
+            QueueToken queueToken = queueTokenRepository.findByUuidAndTokenStatus(uuid, TokenStatus.RESERVED).orElseThrow(() -> {
                 throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "해당 UUID는 존재하지 않습니다.");
             });
-        List<QueueToken> availableQueueTokens = jpaAuthRepository.findAllByTokenStatusOrderByTokenIdDesc(TokenStatus.AVAILABLE);
+        List<QueueToken> availableQueueTokens = queueTokenRepository.findAllByTokenStatusOrderByTokenIdDesc(TokenStatus.AVAILABLE);
+        Long position = queueTokenRepository.countAllByCreateDtBeforeAndTokenStatus(queueToken.getCreateDt(), TokenStatus.RESERVED) + 1;
         if (availableQueueTokens.size() >= 10 || queueToken.getPosition() == null) {
-            Long position = jpaAuthRepository.countAllByCreateDtBeforeAndTokenStatus(queueToken.getCreateDt(), TokenStatus.RESERVED) + 1;
             queueToken.updatePosition(position);
-            return jpaAuthRepository.save(queueToken);
+            return queueTokenRepository.save(queueToken);
         } else {
+            queueToken.updatePosition(position);
             if (queueToken.getPosition() == 1) {
                 queueToken.updateAvailable(TokenStatus.AVAILABLE, null, LocalDateTime.now().plusMinutes(3));
             }
@@ -53,7 +54,7 @@ public class TokenService {
 
     @Transactional
     public void tokenStatusCheck(String uuid) {
-        QueueToken queueToken = jpaAuthRepository.findByUuid(uuid).orElseThrow(() -> {
+        QueueToken queueToken = queueTokenRepository.findByUuid(uuid).orElseThrow(() -> {
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "해당 UUID는 존재하지 않습니다.");
         });
         if (!TokenStatus.AVAILABLE.equals(queueToken.getTokenStatus())) {
@@ -64,13 +65,13 @@ public class TokenService {
     }
 
     public void tokenExpired(String uuid) {
-        QueueToken queueToken = jpaAuthRepository.findByUuid(uuid).get();
+        QueueToken queueToken = queueTokenRepository.findByUuid(uuid).get();
         queueToken.updateExpired(TokenStatus.EXPIRED);
     }
 
     @Transactional
     public void tokenExpiredCheck() {
-        List<QueueToken> expiredQueueToken = jpaAuthRepository.findAllByExpirationTimeBeforeAndTokenStatus(LocalDateTime.now(), TokenStatus.AVAILABLE);
+        List<QueueToken> expiredQueueToken = queueTokenRepository.findAllByExpirationTimeBeforeAndTokenStatus(LocalDateTime.now(), TokenStatus.AVAILABLE);
         if (expiredQueueToken.size() == 0) return;
         for (QueueToken queueToken : expiredQueueToken) {
             queueToken.updateExpired(TokenStatus.EXPIRED);

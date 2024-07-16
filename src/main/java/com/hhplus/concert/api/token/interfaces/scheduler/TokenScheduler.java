@@ -12,7 +12,7 @@ public class TokenScheduler {
     private final TokenService tokenService;
 
     @Scheduled(fixedDelay = 60000)
-    public void processAuth() {
+    public void processTokenExpired() {
         tokenService.tokenExpiredCheck();
     }
 
