@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.token.presentation.dto.request;
+package com.hhplus.concert.api.token.interfaces.presentation.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

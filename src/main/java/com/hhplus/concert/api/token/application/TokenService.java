@@ -27,11 +27,9 @@ public class TokenService {
             if (!item.get().getTokenStatus().equals(TokenStatus.EXPIRED)) {
                 throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "이미 토큰이 발급된 사용자");
             }
-            queueToken.setTokenId(item.get().getTokenId());
+            queueToken.createToken(item.get().getTokenId());
         }
-        queueToken.setUuid(UUID.randomUUID().toString());
-        queueToken.setTokenStatus(TokenStatus.RESERVED);
-        queueToken.setCreateDt(LocalDateTime.now());
+        queueToken.reservedToken(UUID.randomUUID().toString(), TokenStatus.RESERVED, LocalDateTime.now());
         return jpaAuthRepository.save(queueToken);
     }
 
@@ -43,14 +41,11 @@ public class TokenService {
         List<QueueToken> availableQueueTokens = jpaAuthRepository.findAllByTokenStatusOrderByTokenIdDesc(TokenStatus.AVAILABLE);
         if (availableQueueTokens.size() >= 10 || queueToken.getPosition() == null) {
             Long position = jpaAuthRepository.countAllByCreateDtBeforeAndTokenStatus(queueToken.getCreateDt(), TokenStatus.RESERVED) + 1;
-            queueToken.setPosition(position);
+            queueToken.updatePosition(position);
             return jpaAuthRepository.save(queueToken);
         } else {
             if (queueToken.getPosition() == 1) {
-                queueToken.setTokenStatus(TokenStatus.AVAILABLE);
-                queueToken.setPosition(null);
-                queueToken.setExpirationTime(LocalDateTime.now().plusMinutes(3));
-                jpaAuthRepository.save(queueToken);
+                queueToken.updateAvailable(TokenStatus.AVAILABLE, null, LocalDateTime.now().plusMinutes(3));
             }
             return queueToken;
         }
@@ -64,24 +59,22 @@ public class TokenService {
         if (!TokenStatus.AVAILABLE.equals(queueToken.getTokenStatus())) {
             throw new CustomForbiddenException(HttpStatus.FORBIDDEN, "접근 권한 없음");
         } else {
-            queueToken.setExpirationTime(LocalDateTime.now().plusMinutes(10));
-            jpaAuthRepository.save(queueToken);
+            queueToken.updateExpirationTime(LocalDateTime.now().plusMinutes(10));
         }
     }
 
     public void tokenExpired(String uuid) {
         QueueToken queueToken = jpaAuthRepository.findByUuid(uuid).get();
-        queueToken.setTokenStatus(TokenStatus.EXPIRED);
-        jpaAuthRepository.save(queueToken);
+        queueToken.updateExpired(TokenStatus.EXPIRED);
     }
 
+    @Transactional
     public void tokenExpiredCheck() {
         List<QueueToken> expiredQueueToken = jpaAuthRepository.findAllByExpirationTimeBeforeAndTokenStatus(LocalDateTime.now(), TokenStatus.AVAILABLE);
         if (expiredQueueToken.size() == 0) return;
         for (QueueToken queueToken : expiredQueueToken) {
-            queueToken.setTokenStatus(TokenStatus.EXPIRED);
+            queueToken.updateExpired(TokenStatus.EXPIRED);
         }
-        jpaAuthRepository.saveAll(expiredQueueToken);
     }
 
 }

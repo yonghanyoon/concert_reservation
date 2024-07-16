@@ -17,11 +17,12 @@ public class ConcertMapper {
         }
         List<ScheduleResDTO> dto = new ArrayList<>();
         for (Schedule entity : schedules) {
-            ScheduleResDTO resVo = new ScheduleResDTO();
-            resVo.setScheduleId(entity.getScheduleId());
-            resVo.setConcertId(entity.getConcertId());
-            resVo.setScheduleDate(entity.getScheduleDate());
-            resVo.setTotalSeat(entity.getTotalSeat());
+            ScheduleResDTO resVo = new ScheduleResDTO().builder()
+                .scheduleId(entity.getScheduleId())
+                .concertId(entity.getConcertId())
+                .scheduleDate(entity.getScheduleDate())
+                .totalSeat(entity.getTotalSeat())
+                .build();
             dto.add(resVo);
         }
         return dto;
@@ -33,12 +34,13 @@ public class ConcertMapper {
         }
         List<SeatResDTO> dto = new ArrayList<>();
         for (Seat entity : seats) {
-            SeatResDTO resVo = new SeatResDTO();
-            resVo.setSeatId(entity.getSeatId());
-            resVo.setSeatStatus(entity.getSeatStatus());
-            resVo.setSeatNumber(entity.getSeatNumber());
-            resVo.setScheduleId(entity.getScheduleId());
-            resVo.setPrice(entity.getPrice());
+            SeatResDTO resVo = new SeatResDTO().builder()
+                .seatId(entity.getSeatId())
+                .seatStatus(entity.getSeatStatus())
+                .seatNumber(entity.getSeatNumber())
+                .scheduleId(entity.getScheduleId())
+                .price(entity.getPrice())
+                .build();
             dto.add(resVo);
         }
         return dto;
@@ -50,9 +52,10 @@ public class ConcertMapper {
         }
         List<ConcertResDTO> dto = new ArrayList<>();
         for (Concert entity : concerts) {
-            ConcertResDTO resVo = new ConcertResDTO();
-            resVo.setConcertId(entity.getConcertId());
-            resVo.setTitle(entity.getTitle());
+            ConcertResDTO resVo = new ConcertResDTO().builder()
+                .concertId(entity.getConcertId())
+                .title(entity.getTitle())
+                .build();
             dto.add(resVo);
         }
         return dto;

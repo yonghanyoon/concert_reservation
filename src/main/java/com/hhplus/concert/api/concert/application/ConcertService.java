@@ -76,9 +76,8 @@ public class ConcertService {
     public void seatStatusImpossible(List<Long> seatIds) {
         List<Seat> seats = jpaSeatRepository.findAllById(seatIds);
         for (Seat seat : seats) {
-            seat.setSeatStatus(SeatStatus.IMPOSSIBLE);
+            seat.updateSeatImpossible(SeatStatus.IMPOSSIBLE);
         }
-        jpaSeatRepository.saveAll(seats);
     }
 
 }

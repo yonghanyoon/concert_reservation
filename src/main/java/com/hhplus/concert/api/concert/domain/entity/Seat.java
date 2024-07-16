@@ -7,16 +7,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
 @Builder
 @Table(name = "SEAT")
 public class Seat {
@@ -34,4 +33,8 @@ public class Seat {
     private Long price;
     @Column(name = "USER_ID")
     private Long userId;
+
+    public void updateSeatImpossible(SeatStatus seatStatus) {
+        this.seatStatus = seatStatus;
+    }
 }

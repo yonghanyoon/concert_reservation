@@ -1,10 +1,10 @@
-package com.hhplus.concert.api.token.presentation;
+package com.hhplus.concert.api.token.interfaces.presentation;
 
 import com.hhplus.concert.api.token.application.TokenService;
-import com.hhplus.concert.api.token.presentation.dto.request.TokenPostReqDTO;
-import com.hhplus.concert.api.token.presentation.dto.response.TokenPostResDTO;
-import com.hhplus.concert.api.token.presentation.dto.response.TokenGetResDTO;
-import com.hhplus.concert.api.token.presentation.mapper.TokenMapper;
+import com.hhplus.concert.api.token.interfaces.presentation.dto.request.TokenPostReqDTO;
+import com.hhplus.concert.api.token.interfaces.presentation.dto.response.TokenPostResDTO;
+import com.hhplus.concert.api.token.interfaces.presentation.mapper.TokenMapper;
+import com.hhplus.concert.api.token.interfaces.presentation.dto.response.TokenGetResDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -36,7 +36,7 @@ public class TokenController {
     }
 
     // 유저 대기열 토큰 조회 API
-    @Operation(summary = "유저 대기열 토큰 조회 API")
+    @Operation(summary = "유저 대기열 토z큰 조회 API")
     @GetMapping("/{uuid}")
     public ResponseEntity<TokenGetResDTO> getToken(@PathVariable String uuid) {
         return ResponseEntity.ok(TokenMapper.toDtoFromGet(tokenService.getToken(uuid)));

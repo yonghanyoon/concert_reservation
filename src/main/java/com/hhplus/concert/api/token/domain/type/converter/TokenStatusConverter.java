@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.token.infrastructure.converter;
+package com.hhplus.concert.api.token.domain.type.converter;
 
 import com.hhplus.concert.api.token.domain.type.TokenStatus;
 import jakarta.persistence.AttributeConverter;

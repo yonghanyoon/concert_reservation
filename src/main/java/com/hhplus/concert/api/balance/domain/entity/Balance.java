@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,6 +32,11 @@ public class Balance {
 
     public void putCharge(Long balanceId, Long amount, LocalDateTime modDt) {
         this.balanceId = balanceId;
+        this.amount = amount;
+        this.modDt = modDt;
+    }
+
+    public void useAmount(Long amount, LocalDateTime modDt) {
         this.amount = amount;
         this.modDt = modDt;
     }

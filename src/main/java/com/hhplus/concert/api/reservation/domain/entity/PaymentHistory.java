@@ -10,13 +10,13 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
 @Builder
 @Table(name = "PAYMENT_HISTORY")
 public class PaymentHistory {
@@ -34,4 +34,9 @@ public class PaymentHistory {
     private PaymentStatus paymentStatus;
     @Column(name = "PYAMENT_TIME")
     private LocalDateTime paymentTime;
+
+    public void updatePaymentStatus(PaymentStatus paymentStatus, LocalDateTime paymentTime) {
+        this.paymentStatus = paymentStatus;
+        this.paymentTime = paymentTime;
+    }
 }

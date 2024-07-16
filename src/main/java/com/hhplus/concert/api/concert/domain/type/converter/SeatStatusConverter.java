@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.concert.infrastructure.converter;
+package com.hhplus.concert.api.concert.domain.type.converter;
 
 import com.hhplus.concert.api.concert.domain.type.SeatStatus;
 import jakarta.persistence.AttributeConverter;

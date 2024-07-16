@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
 @Builder
 @Table(name = "RESERVATION")
 public class Reservation {
@@ -47,4 +47,11 @@ public class Reservation {
     private ReservationStatus reservationStatus;
     @Column(name = "RESERVATION_EXPIRY")
     private LocalDateTime reservationExpiry;
+
+    public void updateReservation(String concertTitle, ReservationStatus reservationStatus, LocalDateTime reservationExpiry, Long totalPrice) {
+        this.concertTitle = concertTitle;
+        this.reservationStatus = reservationStatus;
+        this.reservationExpiry = reservationExpiry;
+        this.totalPrice = totalPrice;
+    }
 }

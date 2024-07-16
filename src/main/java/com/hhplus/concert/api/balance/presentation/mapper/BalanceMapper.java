@@ -21,9 +21,10 @@ public class BalanceMapper {
         if (balance == null) {
             return null;
         }
-        BalanceResVo dto = new BalanceResVo();
-        dto.setUserId(balance.getUserId());
-        dto.setAmount(balance.getAmount());
+        BalanceResVo dto = new BalanceResVo().builder()
+            .userId(balance.getUserId())
+            .amount(balance.getAmount())
+            .build();
         return dto;
     }
 

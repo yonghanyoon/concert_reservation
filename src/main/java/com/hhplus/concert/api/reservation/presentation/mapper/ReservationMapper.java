@@ -3,12 +3,10 @@ package com.hhplus.concert.api.reservation.presentation.mapper;
 import com.hhplus.concert.api.reservation.domain.entity.PaymentHistory;
 import com.hhplus.concert.api.reservation.domain.entity.Reservation;
 import com.hhplus.concert.api.reservation.domain.entity.ReservationSeat;
-import com.hhplus.concert.api.reservation.domain.type.PaymentStatus;
 import com.hhplus.concert.api.reservation.presentation.dto.request.PaymentReqDTO;
 import com.hhplus.concert.api.reservation.presentation.dto.request.ReservationReqDTO;
 import com.hhplus.concert.api.reservation.presentation.dto.response.PaymentResDTO;
 import com.hhplus.concert.api.reservation.presentation.dto.response.ReservationResDTO;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,19 +17,21 @@ public class ReservationMapper {
         if (dto == null) {
             return null;
         }
-        Reservation reservation = new Reservation();
-        reservation.setUserId(dto.getUserId());
-        reservation.setConcertId(dto.getContentId());
-        reservation.setScheduleId(dto.getScheduleId());
         List<ReservationSeat> reservationSeats = new ArrayList<>();
         for (Long seatId : dto.getSeatIdList()) {
-            ReservationSeat reservationSeat = new ReservationSeat();
-            reservationSeat.setSeatId(seatId);
-            reservationSeat.setScheduleId(dto.getScheduleId());
-            reservationSeat.setConcertId(dto.getContentId());
+            ReservationSeat reservationSeat = new ReservationSeat().builder()
+                .seatId(seatId)
+                .scheduleId(dto.getScheduleId())
+                .concertId(dto.getContentId())
+                .build();
             reservationSeats.add(reservationSeat);
         }
-        reservation.setReservationSeats(reservationSeats);
+        Reservation reservation = new Reservation().builder()
+            .userId(dto.getUserId())
+            .concertId(dto.getContentId())
+            .scheduleId(dto.getScheduleId())
+            .reservationSeats(reservationSeats)
+            .build();
         return reservation;
     }
 
@@ -39,14 +39,15 @@ public class ReservationMapper {
         if (reservation == null) {
             return null;
         }
-        ReservationResDTO dto = new ReservationResDTO();
-        dto.setReservationId(reservation.getReservationId());
-        dto.setConcertTitle(reservation.getConcertTitle());
-        dto.setUserId(reservation.getUserId());
-        dto.setSeatIdList(reservation.getReservationSeats().stream().map(i -> i.getSeatId()).collect(
-            Collectors.toList()));
-        dto.setTotalPrice(reservation.getTotalPrice());
-        dto.setReservationExpiry(reservation.getReservationExpiry());
+        ReservationResDTO dto = new ReservationResDTO().builder()
+            .reservationId(reservation.getReservationId())
+            .concertTitle(reservation.getConcertTitle())
+            .userId(reservation.getUserId())
+            .seatIdList(reservation.getReservationSeats().stream().map(i -> i.getSeatId()).collect(
+                Collectors.toList()))
+            .totalPrice(reservation.getTotalPrice())
+            .reservationExpiry(reservation.getReservationExpiry())
+            .build();
         return dto;
     }
 
@@ -54,10 +55,11 @@ public class ReservationMapper {
         if (dto == null) {
             return null;
         }
-        PaymentHistory paymentHistory = new PaymentHistory();
-        paymentHistory.setReservationId(dto.getReservationId());
-        paymentHistory.setUserId(dto.getUserId());
-        paymentHistory.setAmount(dto.getAmount());
+        PaymentHistory paymentHistory = new PaymentHistory().builder()
+            .reservationId(dto.getReservationId())
+            .userId(dto.getUserId())
+            .amount(dto.getAmount())
+            .build();
         return paymentHistory;
     }
 
@@ -65,9 +67,10 @@ public class ReservationMapper {
         if (paymentHistory == null) {
             return null;
         }
-        PaymentResDTO dto = new PaymentResDTO();
-        dto.setPaymentId(paymentHistory.getPaymentId());
-        dto.setPaymentTime(paymentHistory.getPaymentTime());
+        PaymentResDTO dto = new PaymentResDTO().builder()
+            .paymentId(paymentHistory.getPaymentId())
+            .paymentTime(paymentHistory.getPaymentTime())
+            .build();
         return dto;
     }
 }

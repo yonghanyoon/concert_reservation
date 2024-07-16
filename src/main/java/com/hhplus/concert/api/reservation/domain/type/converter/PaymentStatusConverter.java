@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.reservation.infrastructure.converter;
+package com.hhplus.concert.api.reservation.domain.type.converter;
 
 import com.hhplus.concert.api.reservation.domain.type.PaymentStatus;
 import jakarta.persistence.AttributeConverter;
