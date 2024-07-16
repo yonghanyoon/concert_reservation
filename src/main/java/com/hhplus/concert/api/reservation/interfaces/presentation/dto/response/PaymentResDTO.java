@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.reservation.presentation.dto.response;
+package com.hhplus.concert.api.reservation.interfaces.presentation.dto.response;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
