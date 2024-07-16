@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "AuthController", description = "대기열 토큰 등록과 조회를 제공하기 위한 API")
+@Tag(name = "TokenController", description = "대기열 토큰 등록과 조회를 제공하기 위한 API")
 @RestController
 @RequestMapping("/api/token")
 public class TokenController {
@@ -36,7 +36,7 @@ public class TokenController {
     }
 
     // 유저 대기열 토큰 조회 API
-    @Operation(summary = "유저 대기열 토z큰 조회 API")
+    @Operation(summary = "유저 대기열 토큰 조회 API")
     @GetMapping("/{uuid}")
     public ResponseEntity<TokenGetResDTO> getToken(@PathVariable String uuid) {
         return ResponseEntity.ok(TokenMapper.toDtoFromGet(tokenService.getToken(uuid)));

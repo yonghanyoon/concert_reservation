@@ -26,8 +26,6 @@ public class ConcertService {
 
     @Transactional
     public List<Concert> getConcerts(String uuid) {
-        tokenService.tokenStatusCheck(uuid);
-
         List<Concert> concerts = jpaConcertRepository.findAll();
         if (concerts.size() == 0) {
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "콘서트가 없습니다.");
@@ -37,8 +35,6 @@ public class ConcertService {
 
     @Transactional
     public List<Schedule> getSchedules(String uuid, Long concertId) {
-        tokenService.tokenStatusCheck(uuid);
-
         List<Schedule> schedules = jpaScheduleRepository.findByConcertIdAndScheduleDateAfter(concertId, LocalDateTime.now());
         if (schedules.size() == 0) {
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "예약 가능한 일정이 없습니다.");
@@ -48,8 +44,6 @@ public class ConcertService {
 
     @Transactional
     public List<Seat> getSeats(String uuid, Long scheduleId) {
-        tokenService.tokenStatusCheck(uuid);
-
         List<Seat> seats = jpaSeatRepository.findByScheduleIdAndSeatStatus(scheduleId, SeatStatus.AVAILABLE);
         if (seats.size() == 0) {
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "예약 가능한 좌석이 없습니다.");
@@ -73,10 +67,10 @@ public class ConcertService {
         return seatTotalPrice;
     }
 
-    public void seatStatusImpossible(List<Long> seatIds) {
+    public void seatStatusUpdate(List<Long> seatIds, SeatStatus seatStatus, Long userId) {
         List<Seat> seats = jpaSeatRepository.findAllById(seatIds);
         for (Seat seat : seats) {
-            seat.updateSeatImpossible(SeatStatus.IMPOSSIBLE);
+            seat.updateSeatStatus(seatStatus, userId);
         }
     }
 

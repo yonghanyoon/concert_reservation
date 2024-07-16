@@ -34,9 +34,10 @@ public class BalanceControllerTest {
     public void putChargeTest() throws Exception {
         // given
         ChargeReqVo reqVo = new ChargeReqVo(1L, 1000L);
-        Balance balance = new Balance();
-        balance.setUserId(1L);
-        balance.setAmount(1000L);
+        Balance balance = Balance.builder()
+            .userId(1L)
+            .amount(1000L)
+            .build();
 
         // when
         when(balanceService.putCharge(balance)).thenReturn(balance);
@@ -57,9 +58,10 @@ public class BalanceControllerTest {
     public void getBalanceTest() throws Exception {
         // given
         Long userId = 1L;
-        Balance balance = new Balance();
-        balance.setUserId(1L);
-        balance.setAmount(1000L);
+        Balance balance = Balance.builder()
+            .userId(1L)
+            .amount(1000L)
+            .build();
 
         // when
         when(balanceService.getBalance(userId)).thenReturn(balance);

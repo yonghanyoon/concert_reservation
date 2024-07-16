@@ -37,11 +37,7 @@ public class ConcertControllerTest {
         Long concertId = 1L;
         String uuid = "011b60f5-dfd9-4975-9a23-1ef9953c0c22";
         List<Schedule> schedules = new ArrayList<>();
-        Schedule schedule = new Schedule();
-        schedule.setScheduleId(1L);
-        schedule.setConcertId(1L);
-        schedule.setScheduleDate(LocalDateTime.of(2024, 6, 28, 12, 0));
-        schedule.setTotalSeat(50L);
+        Schedule schedule = new Schedule(1L, 1L, LocalDateTime.of(2024, 6, 28, 12, 0), 50L);
         schedules.add(schedule);
 
         // when
@@ -65,12 +61,13 @@ public class ConcertControllerTest {
         Long scheduleId = 1L;
         String uuid = "011b60f5-dfd9-4975-9a23-1ef9953c0c22";
         List<Seat> seats = new ArrayList<>();
-        Seat seat = new Seat();
-        seat.setSeatId(1L);
-        seat.setSeatStatus(SeatStatus.AVAILABLE);
-        seat.setSeatNumber(1L);
-        seat.setScheduleId(1L);
-        seat.setPrice(60000L);
+        Seat seat = Seat.builder()
+            .seatId(1L)
+            .seatStatus(SeatStatus.AVAILABLE)
+            .seatNumber(1L)
+            .scheduleId(scheduleId)
+            .price(60000L)
+            .build();
         seats.add(seat);
 
         // when

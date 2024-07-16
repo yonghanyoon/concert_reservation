@@ -19,11 +19,12 @@ public class TokenServiceTest {
     @Test
     public void saveTokenTest() {
         // given
-        QueueToken queueToken = new QueueToken();
-        queueToken.setTokenId(1L);
-        queueToken.setUuid("011b60f5-dfd9-4975-9a23-1ef9953c0c22");
-        queueToken.setTokenStatus(TokenStatus.RESERVED);
-        queueToken.setCreateDt(LocalDateTime.now());
+        QueueToken queueToken = QueueToken.builder()
+            .tokenId(1L)
+            .uuid("011b60f5-dfd9-4975-9a23-1ef9953c0c22")
+            .tokenStatus(TokenStatus.RESERVED)
+            .createDt(LocalDateTime.now())
+            .build();
 
         // when
         when(tokenService.saveToken(queueToken)).thenReturn(queueToken);
@@ -37,10 +38,11 @@ public class TokenServiceTest {
     public void getTokenTest() {
         // given
         String uuid = "011b60f5-dfd9-4975-9a23-1ef9953c0c22";
-        QueueToken queueToken = new QueueToken();
-        queueToken.setPosition(1L);
-        queueToken.setTokenStatus(TokenStatus.RESERVED);
-        queueToken.setExpirationTime(LocalDateTime.of(2024, 6, 28, 12, 0));
+        QueueToken queueToken = QueueToken.builder()
+            .position(1L)
+            .tokenStatus(TokenStatus.RESERVED)
+            .expirationTime(LocalDateTime.of(2024, 6, 28, 12, 0))
+            .build();
 
         // when
         when(tokenService.getToken(uuid)).thenReturn(queueToken);

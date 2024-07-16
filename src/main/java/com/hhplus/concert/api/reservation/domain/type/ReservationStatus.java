@@ -8,7 +8,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ReservationStatus {
     CANCEL("1", "예약 취소"),
-    SUCCESS("2", "예약 성공");
+    STANDBY("2", "예약 대기"),
+    SUCCESS("3", "예약 성공");
 
     private String code;
     private String desc;

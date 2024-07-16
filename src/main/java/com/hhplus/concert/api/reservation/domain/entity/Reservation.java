@@ -54,4 +54,8 @@ public class Reservation {
         this.reservationExpiry = reservationExpiry;
         this.totalPrice = totalPrice;
     }
+
+    public void updateReservationStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
+    }
 }

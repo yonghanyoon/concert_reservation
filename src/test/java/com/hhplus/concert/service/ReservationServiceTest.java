@@ -7,6 +7,7 @@ import com.hhplus.concert.api.reservation.application.ReservationService;
 import com.hhplus.concert.api.reservation.domain.entity.PaymentHistory;
 import com.hhplus.concert.api.reservation.domain.entity.Reservation;
 import com.hhplus.concert.api.reservation.domain.entity.ReservationSeat;
+import com.hhplus.concert.api.reservation.domain.type.PaymentStatus;
 import com.hhplus.concert.api.reservation.domain.type.ReservationStatus;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,21 +25,18 @@ public class ReservationServiceTest {
     public void postReservationSeatTest() {
         // given
         String uuid = "011b60f5-dfd9-4975-9a23-1ef9953c0c22";
-        Reservation reservation = new Reservation();
-        reservation.setReservationId(1L);
-        reservation.setUserId(1L);
-        reservation.setConcertTitle("발라드 황제 이석범 콘서트");
-        reservation.setReservationStatus(ReservationStatus.SUCCESS);
-        reservation.setReservationExpiry(LocalDateTime.of(2024, 6, 28, 12, 0));
-        reservation.setTotalPrice(180000L);
         List<ReservationSeat> reservationSeats = new ArrayList<>();
-        ReservationSeat reservationSeat = new ReservationSeat();
-        reservationSeat.setSeatId(1L);
-        reservationSeat.setConcertId(1L);
-        reservationSeat.setScheduleId(1L);
-        reservationSeat.setReservation(new Reservation().builder().reservationId(1L).build());
+        ReservationSeat reservationSeat = new ReservationSeat(1L, 1L, 1L, 1L);
         reservationSeats.add(reservationSeat);
-        reservation.setReservationSeats(reservationSeats);
+        Reservation reservation = Reservation.builder()
+            .reservationId(1L)
+            .userId(1L)
+            .concertTitle("발라드 황제 이석범 콘서트")
+            .reservationStatus(ReservationStatus.SUCCESS)
+            .reservationExpiry(LocalDateTime.of(2024, 6, 28, 12, 0))
+            .totalPrice(180000L)
+            .reservationSeats(reservationSeats)
+            .build();
 
         // when
         when(reservationService.postReservationSeat(uuid, reservation)).thenReturn(reservation);
@@ -57,12 +55,7 @@ public class ReservationServiceTest {
     public void postPaymentTest() {
         // given
         String uuid = "011b60f5-dfd9-4975-9a23-1ef9953c0c22";
-        PaymentHistory paymentHistory = new PaymentHistory();
-        paymentHistory.setUserId(1L);
-        paymentHistory.setReservationId(1L);
-        paymentHistory.setAmount(180000L);
-        paymentHistory.setPaymentId(1L);
-        paymentHistory.setPaymentTime(LocalDateTime.of(2024, 6, 28, 12, 0));
+        PaymentHistory paymentHistory = new PaymentHistory(1L, 1L, 180000L, 1L, PaymentStatus.SUCCESS, LocalDateTime.of(2024, 6, 28, 12, 0));
 
         // when
         when(reservationService.postPayment(uuid, paymentHistory)).thenReturn(paymentHistory);
