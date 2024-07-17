@@ -15,23 +15,23 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BalanceService {
 
-    private final BalanceRepository jpaBalanceRepository;
+    private final BalanceRepository balanceRepository;
 
     @Transactional
     public Balance putCharge(Balance balance) {
-        Balance selectBalance = jpaBalanceRepository.findByUserId(balance.getUserId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자"));
+        Balance selectBalance = balanceRepository.findByUserId(balance.getUserId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자"));
         balance.putCharge(selectBalance.getBalanceId(), selectBalance.getAmount() + balance.getAmount(), LocalDateTime.now());
-        return jpaBalanceRepository.save(balance);
+        return balanceRepository.save(balance);
     }
 
     @Transactional(readOnly = true)
     public Balance getBalance(Long userId) {
-        return jpaBalanceRepository.findByUserId(userId).orElseThrow(() -> new CustomNotFoundException(
+        return balanceRepository.findByUserId(userId).orElseThrow(() -> new CustomNotFoundException(
             HttpStatus.NOT_FOUND, "존재하지 않는 사용자"));
     }
 
     public void useBalance(Long userId, Long amount) {
-        Balance balance = jpaBalanceRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자"));
+        Balance balance = balanceRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자"));
         if (balance.getAmount() < amount) {
             throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "잔액이 부족합니다.");
         }
