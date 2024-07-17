@@ -1,4 +1,4 @@
-package com.hhplus.concert.service;
+package com.hhplus.concert.unit.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class BalanceServiceTest {
+public class BalanceServiceUnitTest {
 
     private BalanceService balanceService = Mockito.mock(BalanceService.class);
 

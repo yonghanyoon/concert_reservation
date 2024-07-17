@@ -1,4 +1,4 @@
-package com.hhplus.concert.controller;
+package com.hhplus.concert.unit.controller;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(BalanceController.class)
-public class BalanceControllerTest {
+public class BalanceControllerUnitTest {
 
     @Autowired
     private MockMvc mockMvc;

@@ -35,7 +35,7 @@ public class ReservationService {
 
 
     @Transactional
-    public Reservation postReservationSeat(String uuid, Reservation reservation) {
+    public Reservation postReservationSeat(Reservation reservation) {
         List<Long> seatIds = reservation.getReservationSeats().stream().map(i -> i.getSeatId()).collect(
             Collectors.toList());
         reservation.updateReservation(concertService.getConcertTitle(reservation.getConcertId()),

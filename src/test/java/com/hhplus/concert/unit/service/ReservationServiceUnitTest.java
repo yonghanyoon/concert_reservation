@@ -1,4 +1,4 @@
-package com.hhplus.concert.service;
+package com.hhplus.concert.unit.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class ReservationServiceTest {
+public class ReservationServiceUnitTest {
 
     private ReservationService reservationService = Mockito.mock(ReservationService.class);
 
@@ -24,7 +24,6 @@ public class ReservationServiceTest {
     @Test
     public void postReservationSeatTest() {
         // given
-        String uuid = "011b60f5-dfd9-4975-9a23-1ef9953c0c22";
         List<ReservationSeat> reservationSeats = new ArrayList<>();
         ReservationSeat reservationSeat = new ReservationSeat(1L, 1L, 1L, 1L);
         reservationSeats.add(reservationSeat);
@@ -39,15 +38,15 @@ public class ReservationServiceTest {
             .build();
 
         // when
-        when(reservationService.postReservationSeat(uuid, reservation)).thenReturn(reservation);
+        when(reservationService.postReservationSeat(reservation)).thenReturn(reservation);
 
         // then
-        assertThat(reservationService.postReservationSeat(uuid, reservation).getReservationId()).isEqualTo(1L);
-        assertThat(reservationService.postReservationSeat(uuid, reservation).getConcertTitle()).isEqualTo("발라드 황제 이석범 콘서트");
-        assertThat(reservationService.postReservationSeat(uuid, reservation).getUserId()).isEqualTo(1L);
-        assertThat(reservationService.postReservationSeat(uuid, reservation).getReservationSeats().get(0).getSeatId()).isEqualTo(1L);
-        assertThat(reservationService.postReservationSeat(uuid, reservation).getTotalPrice()).isEqualTo(180000L);
-        assertThat(reservationService.postReservationSeat(uuid, reservation).getReservationExpiry()).isEqualTo("2024-06-28T12:00:00");
+        assertThat(reservationService.postReservationSeat(reservation).getReservationId()).isEqualTo(1L);
+        assertThat(reservationService.postReservationSeat(reservation).getConcertTitle()).isEqualTo("발라드 황제 이석범 콘서트");
+        assertThat(reservationService.postReservationSeat(reservation).getUserId()).isEqualTo(1L);
+        assertThat(reservationService.postReservationSeat(reservation).getReservationSeats().get(0).getSeatId()).isEqualTo(1L);
+        assertThat(reservationService.postReservationSeat(reservation).getTotalPrice()).isEqualTo(180000L);
+        assertThat(reservationService.postReservationSeat(reservation).getReservationExpiry()).isEqualTo("2024-06-28T12:00:00");
     }
 
     @DisplayName("결제 히스토리 테스트")

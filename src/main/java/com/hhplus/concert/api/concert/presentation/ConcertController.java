@@ -31,20 +31,20 @@ public class ConcertController {
     @Operation(summary = "콘서트 조회 API")
     @GetMapping("")
     public ResponseEntity<List<ConcertResDTO>> getConcerts(@RequestHeader String uuid) {
-        return ResponseEntity.ok(ConcertMapper.toDtoFromConcert(concertService.getConcerts(uuid)));
+        return ResponseEntity.ok(ConcertMapper.toDtoFromConcert(concertService.getConcerts()));
     }
 
     // 예약 가능 날짜 조회 API
     @Operation(summary = "예약 가능 날짜 조회 API")
     @GetMapping("/schedules/{contentId}")
     public ResponseEntity<List<ScheduleResDTO>> getSchedules(@RequestHeader String uuid, @PathVariable Long contentId) {
-        return ResponseEntity.ok(ConcertMapper.toDtoFromSchedule(concertService.getSchedules(uuid, contentId)));
+        return ResponseEntity.ok(ConcertMapper.toDtoFromSchedule(concertService.getSchedules(contentId)));
     }
 
     // 해당 날짜 예약 가능 좌석 조회 API
     @Operation(summary = "해당 날짜 예약 가능 좌석 조회 API")
     @GetMapping("/seats/{scheduleId}")
     public ResponseEntity<List<SeatResDTO>> getSeats(@RequestHeader String uuid, @PathVariable Long scheduleId) {
-        return ResponseEntity.ok(ConcertMapper.toDtoFromSeat(concertService.getSeats(uuid, scheduleId)));
+        return ResponseEntity.ok(ConcertMapper.toDtoFromSeat(concertService.getSeats(scheduleId)));
     }
 }

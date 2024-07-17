@@ -1,4 +1,4 @@
-package com.hhplus.concert.controller;
+package com.hhplus.concert.unit.controller;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(ConcertController.class)
-public class ConcertControllerTest {
+public class ConcertControllerUnitTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,13 +35,12 @@ public class ConcertControllerTest {
     public void getSchedulesTest() throws Exception {
         // given
         Long concertId = 1L;
-        String uuid = "011b60f5-dfd9-4975-9a23-1ef9953c0c22";
         List<Schedule> schedules = new ArrayList<>();
         Schedule schedule = new Schedule(1L, 1L, LocalDateTime.of(2024, 6, 28, 12, 0), 50L);
         schedules.add(schedule);
 
         // when
-        when(concertService.getSchedules(uuid, concertId)).thenReturn(schedules);
+        when(concertService.getSchedules(concertId)).thenReturn(schedules);
 
         // then
         mockMvc.perform(
@@ -59,7 +58,6 @@ public class ConcertControllerTest {
     public void getSeatsTest() throws Exception {
         // given
         Long scheduleId = 1L;
-        String uuid = "011b60f5-dfd9-4975-9a23-1ef9953c0c22";
         List<Seat> seats = new ArrayList<>();
         Seat seat = Seat.builder()
             .seatId(1L)
@@ -71,7 +69,7 @@ public class ConcertControllerTest {
         seats.add(seat);
 
         // when
-        when(concertService.getSeats(uuid, scheduleId)).thenReturn(seats);
+        when(concertService.getSeats(scheduleId)).thenReturn(seats);
 
         // then
         mockMvc.perform(
