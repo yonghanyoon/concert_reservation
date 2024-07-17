@@ -43,13 +43,13 @@ public class TokenService {
         if (availableQueueTokens.size() >= 10 || queueToken.getPosition() == null) {
             queueToken.updatePosition(position);
             return queueTokenRepository.save(queueToken);
-        } else {
-            queueToken.updatePosition(position);
-            if (queueToken.getPosition() == 1) {
-                queueToken.updateAvailable(TokenStatus.AVAILABLE, null, LocalDateTime.now().plusMinutes(3));
-            }
-            return queueToken;
         }
+
+        queueToken.updatePosition(position);
+        if (queueToken.getPosition() == 1) {
+            queueToken.updateAvailable(TokenStatus.AVAILABLE, null, LocalDateTime.now().plusMinutes(3));
+        }
+        return queueToken;
     }
 
     @Transactional
