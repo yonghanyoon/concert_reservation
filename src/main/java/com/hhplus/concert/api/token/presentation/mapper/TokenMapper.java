@@ -1,9 +1,9 @@
-package com.hhplus.concert.api.token.interfaces.presentation.mapper;
+package com.hhplus.concert.api.token.presentation.mapper;
 
 import com.hhplus.concert.api.token.domain.entity.QueueToken;
-import com.hhplus.concert.api.token.interfaces.presentation.dto.request.TokenPostReqDTO;
-import com.hhplus.concert.api.token.interfaces.presentation.dto.response.TokenGetResDTO;
-import com.hhplus.concert.api.token.interfaces.presentation.dto.response.TokenPostResDTO;
+import com.hhplus.concert.api.token.presentation.dto.request.TokenPostReqDTO;
+import com.hhplus.concert.api.token.presentation.dto.response.TokenGetResDTO;
+import com.hhplus.concert.api.token.presentation.dto.response.TokenPostResDTO;
 
 public class TokenMapper {
 

@@ -1,11 +1,11 @@
-package com.hhplus.concert.api.reservation.interfaces.presentation;
+package com.hhplus.concert.api.reservation.presentation;
 
-import com.hhplus.concert.api.reservation.interfaces.presentation.dto.request.PaymentReqDTO;
-import com.hhplus.concert.api.reservation.interfaces.presentation.dto.request.ReservationReqDTO;
-import com.hhplus.concert.api.reservation.interfaces.presentation.dto.response.PaymentResDTO;
-import com.hhplus.concert.api.reservation.interfaces.presentation.dto.response.ReservationResDTO;
+import com.hhplus.concert.api.reservation.presentation.dto.request.PaymentReqDTO;
+import com.hhplus.concert.api.reservation.presentation.dto.request.ReservationReqDTO;
+import com.hhplus.concert.api.reservation.presentation.dto.response.PaymentResDTO;
+import com.hhplus.concert.api.reservation.presentation.dto.response.ReservationResDTO;
 import com.hhplus.concert.api.reservation.application.ReservationService;
-import com.hhplus.concert.api.reservation.interfaces.presentation.mapper.ReservationMapper;
+import com.hhplus.concert.api.reservation.presentation.mapper.ReservationMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

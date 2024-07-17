@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.reservation.interfaces.presentation.dto.response;
+package com.hhplus.concert.api.reservation.presentation.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;

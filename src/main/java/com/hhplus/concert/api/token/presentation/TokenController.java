@@ -1,10 +1,10 @@
-package com.hhplus.concert.api.token.interfaces.presentation;
+package com.hhplus.concert.api.token.presentation;
 
 import com.hhplus.concert.api.token.application.TokenService;
-import com.hhplus.concert.api.token.interfaces.presentation.dto.request.TokenPostReqDTO;
-import com.hhplus.concert.api.token.interfaces.presentation.dto.response.TokenPostResDTO;
-import com.hhplus.concert.api.token.interfaces.presentation.mapper.TokenMapper;
-import com.hhplus.concert.api.token.interfaces.presentation.dto.response.TokenGetResDTO;
+import com.hhplus.concert.api.token.presentation.dto.request.TokenPostReqDTO;
+import com.hhplus.concert.api.token.presentation.dto.response.TokenPostResDTO;
+import com.hhplus.concert.api.token.presentation.mapper.TokenMapper;
+import com.hhplus.concert.api.token.presentation.dto.response.TokenGetResDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

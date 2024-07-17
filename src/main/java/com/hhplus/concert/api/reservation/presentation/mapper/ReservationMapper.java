@@ -1,12 +1,12 @@
-package com.hhplus.concert.api.reservation.interfaces.presentation.mapper;
+package com.hhplus.concert.api.reservation.presentation.mapper;
 
 import com.hhplus.concert.api.reservation.domain.entity.PaymentHistory;
 import com.hhplus.concert.api.reservation.domain.entity.Reservation;
 import com.hhplus.concert.api.reservation.domain.entity.ReservationSeat;
-import com.hhplus.concert.api.reservation.interfaces.presentation.dto.request.PaymentReqDTO;
-import com.hhplus.concert.api.reservation.interfaces.presentation.dto.request.ReservationReqDTO;
-import com.hhplus.concert.api.reservation.interfaces.presentation.dto.response.PaymentResDTO;
-import com.hhplus.concert.api.reservation.interfaces.presentation.dto.response.ReservationResDTO;
+import com.hhplus.concert.api.reservation.presentation.dto.request.PaymentReqDTO;
+import com.hhplus.concert.api.reservation.presentation.dto.request.ReservationReqDTO;
+import com.hhplus.concert.api.reservation.presentation.dto.response.PaymentResDTO;
+import com.hhplus.concert.api.reservation.presentation.dto.response.ReservationResDTO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

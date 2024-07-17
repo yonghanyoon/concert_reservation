@@ -52,6 +52,7 @@ public class TokenService {
         return queueToken;
     }
 
+    // 토큰 검증
     @Transactional
     public void tokenStatusCheck(String uuid) {
         QueueToken queueToken = queueTokenRepository.findByUuid(uuid).orElseThrow(() -> {
@@ -64,11 +65,13 @@ public class TokenService {
         }
     }
 
+    // 결제 완료 토큰 만료
     public void tokenExpired(String uuid) {
         QueueToken queueToken = queueTokenRepository.findByUuid(uuid).get();
         queueToken.updateExpired(TokenStatus.EXPIRED);
     }
 
+    // 토큰 만료시간 체크
     @Transactional
     public void tokenExpiredCheck() {
         List<QueueToken> expiredQueueToken = queueTokenRepository.findAllByExpirationTimeBeforeAndTokenStatus(LocalDateTime.now(), TokenStatus.AVAILABLE);

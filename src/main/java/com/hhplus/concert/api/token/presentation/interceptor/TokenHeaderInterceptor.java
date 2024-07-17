@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.token.interfaces.interceptor;
+package com.hhplus.concert.api.token.presentation.interceptor;
 
 import com.hhplus.concert.api.token.application.TokenService;
 import jakarta.servlet.http.HttpServletRequest;

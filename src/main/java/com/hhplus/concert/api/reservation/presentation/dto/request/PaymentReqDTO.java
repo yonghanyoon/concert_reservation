@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.reservation.interfaces.presentation.dto.request;
+package com.hhplus.concert.api.reservation.presentation.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

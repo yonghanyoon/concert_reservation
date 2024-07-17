@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.reservation.interfaces.scheduler;
+package com.hhplus.concert.api.reservation.scheduler;
 
 import com.hhplus.concert.api.reservation.application.ReservationService;
 import lombok.RequiredArgsConstructor;

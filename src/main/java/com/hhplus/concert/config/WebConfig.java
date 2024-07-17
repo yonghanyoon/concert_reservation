@@ -1,6 +1,6 @@
 package com.hhplus.concert.config;
 
-import com.hhplus.concert.api.token.interfaces.interceptor.TokenHeaderInterceptor;
+import com.hhplus.concert.api.token.presentation.interceptor.TokenHeaderInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

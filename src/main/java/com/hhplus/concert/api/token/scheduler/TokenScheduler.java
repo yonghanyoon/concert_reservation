@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.token.interfaces.scheduler;
+package com.hhplus.concert.api.token.scheduler;
 
 import com.hhplus.concert.api.token.application.TokenService;
 import lombok.RequiredArgsConstructor;

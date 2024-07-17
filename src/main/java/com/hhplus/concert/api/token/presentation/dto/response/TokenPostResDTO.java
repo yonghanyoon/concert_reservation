@@ -1,4 +1,4 @@
-package com.hhplus.concert.api.token.interfaces.presentation.dto.response;
+package com.hhplus.concert.api.token.presentation.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
