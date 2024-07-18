@@ -79,4 +79,27 @@ public class ConcertServiceUnitTest {
         assertThat(concertService.getSeats(scheduleId).get(0).getScheduleId()).isEqualTo(scheduleId);
         assertThat(concertService.getSeats(scheduleId).get(0).getPrice()).isEqualTo(60000L);
     }
+
+    @DisplayName("콘서트 제목 조회 테스트")
+    @Test
+    void get_concert_title_test() {
+        // given
+        Long concertId = 1L;
+        String title = "발라드 황제 이석범 콘서트";
+        // when
+        when(concertService.getConcertTitle(concertId)).thenReturn(title);
+        // then
+        assertThat(concertService.getConcertTitle(concertId)).isEqualTo(title);
+    }
+
+    @DisplayName("예약 좌석 총 금액 테스트")
+    @Test
+    void get_seat_total_price_test() {
+        // given
+        List<Long> seatIds = List.of(1L, 2L, 3L);
+        // when
+        when(concertService.getSeatTotalPrice(seatIds)).thenReturn(180000L);
+        // then
+        assertThat(concertService.getSeatTotalPrice(seatIds)).isEqualTo(180000L);
+    }
 }
