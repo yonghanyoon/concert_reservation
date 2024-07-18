@@ -2,8 +2,8 @@ package com.hhplus.concert.api.balance.application;
 
 import com.hhplus.concert.api.balance.domain.entity.Balance;
 import com.hhplus.concert.api.balance.domain.repository.BalanceRepository;
-import com.hhplus.concert.exception.list.CustomBadRequestException;
-import com.hhplus.concert.exception.list.CustomNotFoundException;
+import com.hhplus.concert.common.exception.list.CustomBadRequestException;
+import com.hhplus.concert.common.exception.list.CustomNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;

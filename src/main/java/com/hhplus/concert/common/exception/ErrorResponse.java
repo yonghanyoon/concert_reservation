@@ -1,4 +1,4 @@
-package com.hhplus.concert.exception;
+package com.hhplus.concert.common.exception;
 
 import lombok.Getter;
 import lombok.Setter;

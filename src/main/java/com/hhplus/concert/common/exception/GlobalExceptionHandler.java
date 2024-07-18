@@ -1,10 +1,9 @@
-package com.hhplus.concert.exception;
+package com.hhplus.concert.common.exception;
 
-import com.hhplus.concert.exception.list.CustomBadRequestException;
-import com.hhplus.concert.exception.list.CustomForbiddenException;
-import com.hhplus.concert.exception.list.CustomNotFoundException;
+import com.hhplus.concert.common.exception.list.CustomBadRequestException;
+import com.hhplus.concert.common.exception.list.CustomForbiddenException;
+import com.hhplus.concert.common.exception.list.CustomNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
