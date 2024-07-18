@@ -7,7 +7,7 @@ import com.hhplus.concert.api.concert.domain.repository.ConcertRepository;
 import com.hhplus.concert.api.concert.domain.type.SeatStatus;
 import com.hhplus.concert.api.concert.domain.repository.ScheduleRepository;
 import com.hhplus.concert.api.concert.domain.repository.SeatRepository;
-import com.hhplus.concert.exception.list.CustomNotFoundException;
+import com.hhplus.concert.common.exception.list.CustomNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

@@ -12,7 +12,7 @@ import com.hhplus.concert.api.reservation.domain.repository.ReservationRepositor
 import com.hhplus.concert.api.reservation.domain.repository.ReservationSeatRepository;
 import com.hhplus.concert.api.reservation.domain.type.PaymentStatus;
 import com.hhplus.concert.api.reservation.domain.type.ReservationStatus;
-import com.hhplus.concert.exception.list.CustomBadRequestException;
+import com.hhplus.concert.common.exception.list.CustomBadRequestException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +86,6 @@ public class ReservationService {
             seats.addAll(reservation.getReservationSeats().stream().map(ReservationSeat::getSeatId).toList());
         }
         concertService.seatStatusUpdate(seats, SeatStatus.AVAILABLE, null);
-        reservationSeatRepository.deleteAllById(seats);
+        reservationSeatRepository.deleteAllBySeatIdIn(seats);
     }
 }
