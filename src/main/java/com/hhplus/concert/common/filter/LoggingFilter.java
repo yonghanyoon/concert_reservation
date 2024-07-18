@@ -18,20 +18,13 @@ public class LoggingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
 
-        // ContentCachingRequestWrapper와 ContentCachingResponseWrapper를 사용하여 요청과 응답을 래핑
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
 
-        // 체인을 통해 필터를 진행합니다.
         filterChain.doFilter(wrappedRequest, wrappedResponse);
 
-        // 요청 로그 기록
         logRequest(wrappedRequest);
-
-        // 응답 로그 기록
         logResponse(wrappedResponse);
-
-        // 응답을 클라이언트로 보내기 위해서 내용을 복사합니다.
         wrappedResponse.copyBodyToResponse();
     }
 
