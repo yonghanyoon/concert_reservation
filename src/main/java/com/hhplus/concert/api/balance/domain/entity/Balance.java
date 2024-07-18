@@ -32,12 +32,12 @@ public class Balance {
 
     public void putCharge(Long balanceId, Long amount, LocalDateTime modDt) {
         this.balanceId = balanceId;
-        this.amount = amount;
+        this.amount += amount;
         this.modDt = modDt;
     }
 
     public void useAmount(Long amount, LocalDateTime modDt) {
-        this.amount = amount;
+        this.amount -= amount;
         this.modDt = modDt;
     }
 }

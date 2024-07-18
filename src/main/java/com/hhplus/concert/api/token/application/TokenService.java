@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TokenService {
     private final QueueTokenRepository queueTokenRepository;
 
@@ -25,6 +27,7 @@ public class TokenService {
         Optional<QueueToken> item = queueTokenRepository.findByUserId(queueToken.getUserId());
         if (item.isPresent()) {
             if (!item.get().getTokenStatus().equals(TokenStatus.EXPIRED)) {
+                log.warn(String.format("[대기열 토큰 발급] userId : %d -> 이미 토큰이 발급된 사용자", item.get().getUserId()));
                 throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "이미 토큰이 발급된 사용자");
             }
             queueToken.createToken(item.get().getTokenId());
@@ -35,9 +38,10 @@ public class TokenService {
 
     @Transactional
     public QueueToken getToken(String uuid) {
-            QueueToken queueToken = queueTokenRepository.findByUuidAndTokenStatus(uuid, TokenStatus.RESERVED).orElseThrow(() -> {
-                throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "해당 UUID는 존재하지 않습니다.");
-            });
+        QueueToken queueToken = queueTokenRepository.findByUuidAndTokenStatus(uuid, TokenStatus.RESERVED).orElseThrow(() -> {
+            log.warn(String.format("[대기열 조회] uuid : %s -> 해당 UUID가 존재하지 않거나 대기 상태가 아닙니다.", uuid));
+            throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "해당 UUID가 존재하지 않거나 대기 상태가 아닙니다.");
+        });
         List<QueueToken> availableQueueTokens = queueTokenRepository.findAllByTokenStatusOrderByTokenIdDesc(TokenStatus.AVAILABLE);
         Long position = queueTokenRepository.countAllByCreateDtBeforeAndTokenStatus(queueToken.getCreateDt(), TokenStatus.RESERVED) + 1;
         if (availableQueueTokens.size() >= 10 || queueToken.getPosition() == null) {
@@ -48,6 +52,7 @@ public class TokenService {
         queueToken.updatePosition(position);
         if (queueToken.getPosition() == 1) {
             queueToken.updateAvailable(TokenStatus.AVAILABLE, null, LocalDateTime.now().plusMinutes(3));
+            log.info(String.format("[대기열 조회] userId : %d -> 대기열 입장", queueToken.getUserId()));
         }
         return queueToken;
     }
@@ -56,9 +61,11 @@ public class TokenService {
     @Transactional
     public void tokenStatusCheck(String uuid) {
         QueueToken queueToken = queueTokenRepository.findByUuid(uuid).orElseThrow(() -> {
+            log.warn(String.format("[대기열 검증] uuid : %s -> 존재하지 않는 UUID", uuid));
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "해당 UUID는 존재하지 않습니다.");
         });
         if (!TokenStatus.AVAILABLE.equals(queueToken.getTokenStatus())) {
+            log.warn(String.format("[대기열 검증] uuid : %s -> 접근 권한 없음", uuid));
             throw new CustomForbiddenException(HttpStatus.FORBIDDEN, "접근 권한 없음");
         } else {
             queueToken.updateExpirationTime(LocalDateTime.now().plusMinutes(10));
@@ -69,15 +76,17 @@ public class TokenService {
     public void tokenExpired(String uuid) {
         QueueToken queueToken = queueTokenRepository.findByUuid(uuid).get();
         queueToken.updateExpired(TokenStatus.EXPIRED);
+        log.info(String.format("[토큰 만료] uuid : %s -> 결제 성공", uuid));
     }
 
-    // 토큰 만료시간 체크
+    // 토큰 만료 시간 체크
     @Transactional
     public void tokenExpiredCheck() {
         List<QueueToken> expiredQueueToken = queueTokenRepository.findAllByExpirationTimeBeforeAndTokenStatus(LocalDateTime.now(), TokenStatus.AVAILABLE);
         if (expiredQueueToken.size() == 0) return;
         for (QueueToken queueToken : expiredQueueToken) {
             queueToken.updateExpired(TokenStatus.EXPIRED);
+            log.info(String.format("[토큰 만료] uuid : %s -> 만료 시간 초과", queueToken.getUuid()));
         }
     }
 

@@ -11,12 +11,14 @@ import com.hhplus.concert.common.exception.list.CustomNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ConcertService {
     private final ConcertRepository concertRepository;
     private final ScheduleRepository scheduleRepository;
@@ -26,6 +28,7 @@ public class ConcertService {
     public List<Concert> getConcerts() {
         List<Concert> concerts = concertRepository.findAll();
         if (concerts.size() == 0) {
+            log.info("[콘서트 조회] -> 콘서트가 없습니다.");
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "콘서트가 없습니다.");
         }
         return concerts;
@@ -35,6 +38,7 @@ public class ConcertService {
     public List<Schedule> getSchedules(Long concertId) {
         List<Schedule> schedules = scheduleRepository.findByConcertIdAndScheduleDateAfter(concertId, LocalDateTime.now());
         if (schedules.size() == 0) {
+            log.info(String.format("[예약 가능 일정 조회] concertId : %d -> 예약 가능한 일정이 없습니다.", concertId));
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "예약 가능한 일정이 없습니다.");
         }
         return schedules;
@@ -44,6 +48,7 @@ public class ConcertService {
     public List<Seat> getSeats(Long scheduleId) {
         List<Seat> seats = seatRepository.findByScheduleIdAndSeatStatus(scheduleId, SeatStatus.AVAILABLE);
         if (seats.size() == 0) {
+            log.info(String.format("[예약 가능 좌석 조회] scheduleId : %d -> 예약 가능한 좌석이 없습니다.", scheduleId));
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "예약 가능한 좌석이 없습니다.");
         }
         return seats;
@@ -51,6 +56,7 @@ public class ConcertService {
 
     public String getConcertTitle(Long concertId) {
         Concert concert = concertRepository.findById(concertId).orElseThrow(() -> {
+            log.error(String.format("[예약 정보 콘서트 제목 조회] concertId : %d -> 콘서트가 없습니다.", concertId));
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "콘서트가 없습니다.");
         });
         return concert.getTitle();

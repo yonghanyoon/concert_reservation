@@ -18,12 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
@@ -47,6 +49,8 @@ public class ReservationService {
                                                                                                       reservation.getScheduleId(),
                                                                                                       reservation.getConcertId());
         if (reservationSeats.size() != 0) {
+            log.warn("[좌석 예약] seatId : " + reservationSeats.stream().map(ReservationSeat::getSeatId).collect(
+                Collectors.toList()) + " -> 이미 예약된 좌석입니다.");
             throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "이미 예약된 좌석입니다.");
         }
         for (ReservationSeat item : reservation.getReservationSeats()) {
@@ -64,9 +68,9 @@ public class ReservationService {
     public PaymentHistory postPayment(String uuid, PaymentHistory paymentHistory) {
         reservationRepository.findByReservationIdAndUserId(
             paymentHistory.getReservationId(), paymentHistory.getUserId()).orElseThrow(() -> {
-            throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "예약 정보가 없습니다.");
-        });
-
+                log.warn(String.format("[결제 히스토리] reservationId : %d -> 예약 정보가 없습니다.", paymentHistory.getReservationId()));
+                throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "예약 정보가 없습니다.");
+            });
 
         paymentHistory.updatePaymentStatus(PaymentStatus.SUCCESS, LocalDateTime.now());
         paymentHistoryRepository.save(paymentHistory);
@@ -83,6 +87,7 @@ public class ReservationService {
         List<Long> seats = new ArrayList<>();
         for (Reservation reservation : expiredReservation) {
             reservation.updateReservationStatus(ReservationStatus.CANCEL);
+            log.info(String.format("[ReservationScheduler] reservationId : %d -> 예약 시간 만료", reservation.getReservationId()));
             seats.addAll(reservation.getReservationSeats().stream().map(ReservationSeat::getSeatId).toList());
         }
         concertService.seatStatusUpdate(seats, SeatStatus.AVAILABLE, null);

@@ -28,7 +28,6 @@ public class WebConfig implements WebMvcConfigurer {
 
         registrationBean.setFilter(new LoggingFilter());
         registrationBean.addUrlPatterns("/*");
-
         return registrationBean;
     }
 }
