@@ -10,7 +10,7 @@ spring:
       &serverTimezone=Asia/Seoul
       &characterEncoding=UTF-8
       &rewriteBatchedStatements=true
-      &profileSQL=true
+      &profileSQL=false
       &logger=Slf4JLogger
       &maxQuerySizeToLog=999999
     driver-class-name: com.mysql.cj.jdbc.Driver
