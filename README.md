@@ -2,13 +2,13 @@
 
 ### [Milestone](https://github.com/users/yonghanyoon/projects/1)
 -----
-### [Sequence Diagram](https://github.com/yonghanyoon/concert_reservation/blob/feature/step/Docs/concert_flow.svg)
+### [Sequence Diagram](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/concert_flow.svg)
 -----
-### [ERD](https://github.com/yonghanyoon/concert_reservation/blob/feature/step/Docs/concert_erd.svg)
+### [ERD](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/concert_erd.svg)
 -----
-### [ApiSpecs](https://github.com/yonghanyoon/concert_reservation/blob/feature/step/Docs/api_spec.md)
+### [ApiSpecs](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/api_spec.md)
 -----
-### [Swagger](https://github.com/yonghanyoon/concert_reservation/blob/feature/step/Docs/swagger.md)
+### [Swagger](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/swagger.md)
 -----
 1️⃣ **`주요` 유저 대기열 토큰 기능**
 
