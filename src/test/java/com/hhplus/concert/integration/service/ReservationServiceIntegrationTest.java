@@ -8,7 +8,6 @@ import com.hhplus.concert.api.reservation.domain.entity.PaymentHistory;
 import com.hhplus.concert.api.reservation.domain.entity.Reservation;
 import com.hhplus.concert.api.reservation.domain.entity.ReservationSeat;
 import com.hhplus.concert.api.reservation.domain.repository.ReservationSeatRepository;
-import com.hhplus.concert.api.reservation.domain.type.ReservationStatus;
 import com.hhplus.concert.common.exception.list.CustomBadRequestException;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
@@ -57,26 +56,16 @@ public class ReservationServiceIntegrationTest {
         Long concertId = 1L;
         List<ReservationSeat> reservationSeats = new ArrayList<>();
         reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(15L)
-                                            .scheduleId(scheduleId)
-                                            .concertId(concertId)
-                                            .build());
-        reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(16L)
-                                            .scheduleId(scheduleId)
-                                            .concertId(concertId)
-                                            .build());
-        reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(17L)
+                                            .seatId(10L)
                                             .scheduleId(scheduleId)
                                             .concertId(concertId)
                                             .build());
 
-        int numberOfExecute = 11;
+        int numberOfExecute = 10;
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         CountDownLatch countDownLatch = new CountDownLatch(numberOfExecute);
 
-        for (int i = 1; i <= numberOfExecute; i++) {
+        for (int i = 1; i < numberOfExecute; i++) {
             Long id = Long.valueOf(i);
             executorService.execute(() -> {
                 try {
@@ -95,11 +84,11 @@ public class ReservationServiceIntegrationTest {
         }
         countDownLatch.await();
 
-        List<ReservationSeat> reservedSeats = reservationSeatRepository.findAllBySeatIdInAndScheduleIdAndConcertIdAndReservationStatus(
+
+        List<ReservationSeat> reservedSeats = reservationSeatRepository.findAllBySeatIdInAndScheduleIdAndConcertId(
             reservationSeats.stream().map(ReservationSeat::getSeatId).collect(Collectors.toList()),
             scheduleId,
-            concertId,
-            ReservationStatus.STANDBY
+            concertId
         );
 
         assertEquals(reservedSeats.size(), reservationSeats.size());

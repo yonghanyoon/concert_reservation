@@ -5,11 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.hhplus.concert.api.balance.application.BalanceService;
 import com.hhplus.concert.api.balance.domain.entity.Balance;
+import com.hhplus.concert.api.reservation.domain.entity.Reservation;
+import com.hhplus.concert.api.reservation.domain.entity.ReservationSeat;
 import com.hhplus.concert.common.exception.list.CustomNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +114,7 @@ public class BalanceServiceIntegrationTest {
         assertEquals(beforeBalance.getAmount() + amount, afterBalance.getAmount());
     }
 
-    @DisplayName("결제 잔액 차감 동시성 테스트")
+    @DisplayName("잔액 충전 동시성 테스트")
     @Test
     public void concurrent_use_test() throws InterruptedException {
         // given

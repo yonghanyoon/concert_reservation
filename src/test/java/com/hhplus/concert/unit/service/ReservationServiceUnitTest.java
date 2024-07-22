@@ -25,7 +25,7 @@ public class ReservationServiceUnitTest {
     public void postReservationSeatTest() {
         // given
         List<ReservationSeat> reservationSeats = new ArrayList<>();
-        ReservationSeat reservationSeat = new ReservationSeat(1L, 1L, 1L, 1L, 1L, null);
+        ReservationSeat reservationSeat = new ReservationSeat(1L, 1L, 1L, 1L);
         reservationSeats.add(reservationSeat);
         Reservation reservation = Reservation.builder()
             .reservationId(1L)
