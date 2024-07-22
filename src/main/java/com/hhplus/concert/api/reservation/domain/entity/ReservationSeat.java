@@ -1,7 +1,10 @@
 package com.hhplus.concert.api.reservation.domain.entity;
 
+import com.hhplus.concert.api.reservation.domain.type.ReservationStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
@@ -18,34 +21,25 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @Table(name = "RESERVATION_SEAT")
-@IdClass(ReservationSeat.ReservationSeatPk.class)
 public class ReservationSeat {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "RESERVATION_SEAT_ID")
+    private Long reservationSeatId;
     @Column(name = "SEAT_ID")
     private Long seatId;
-    @Id
     @Column(name = "SCHEDULE_ID")
     private Long scheduleId;
-    @Id
     @Column(name = "CONCERT_ID")
     private Long concertId;
     @Column(name = "RESERVATION_ID")
     private Long reservationId;
+    @Column(name = "RESERVATION_STATUS")
+    private ReservationStatus reservationStatus;
 
 
-    @EqualsAndHashCode
-    @NoArgsConstructor
-    public static class ReservationSeatPk implements Serializable {
-        private Long seatId;
-        private Long scheduleId;
-        private Long concertId;
-
-        @Builder
-        public ReservationSeatPk(Long seatId, Long scheduleId, Long concertId) {
-            this.seatId = seatId;
-            this.scheduleId = scheduleId;
-            this.concertId = concertId;
-        }
+    public void updateReservationStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
     }
 
 }

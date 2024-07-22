@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,6 +34,9 @@ public class Seat {
     private Long price;
     @Column(name = "USER_ID")
     private Long userId;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
 
     public void updateSeatStatus(SeatStatus seatStatus, Long userId) {
         this.seatStatus = seatStatus;
