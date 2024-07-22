@@ -46,7 +46,7 @@ public class ReservationService {
 
 
 
-        concertService.optimisticSeat(seatIds, reservation.getUserId());
+        concertService.pessimisticSeat(seatIds, reservation.getUserId());
 
         reservation.updateReservation(
             concertService.getConcertTitle(reservation.getConcertId()),

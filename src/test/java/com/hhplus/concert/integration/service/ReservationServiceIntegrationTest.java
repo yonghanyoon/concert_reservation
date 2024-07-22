@@ -57,23 +57,13 @@ public class ReservationServiceIntegrationTest {
         Long concertId = 1L;
         List<ReservationSeat> reservationSeats = new ArrayList<>();
         reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(18L)
-                                            .scheduleId(scheduleId)
-                                            .concertId(concertId)
-                                            .build());
-        reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(19L)
-                                            .scheduleId(scheduleId)
-                                            .concertId(concertId)
-                                            .build());
-        reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(20L)
+                                            .seatId(1L)
                                             .scheduleId(scheduleId)
                                             .concertId(concertId)
                                             .build());
 
-        int numberOfExecute = 11;
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        int numberOfExecute = 101;
+        ExecutorService executorService = Executors.newFixedThreadPool(100);
         CountDownLatch countDownLatch = new CountDownLatch(numberOfExecute);
 
         for (int i = 1; i <= numberOfExecute; i++) {

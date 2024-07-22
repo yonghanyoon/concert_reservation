@@ -80,7 +80,7 @@ public class ConcertService {
         }
     }
 
-    public void optimisticSeat(List<Long> seatIds, Long userId) {
+    public void pessimisticSeat(List<Long> seatIds, Long userId) {
         try {
             List<Seat> seats = seatRepository.findAllBySeatIdAndSeatStatusForUpdate(seatIds, SeatStatus.AVAILABLE);
             if (seats.size() == 0) {
