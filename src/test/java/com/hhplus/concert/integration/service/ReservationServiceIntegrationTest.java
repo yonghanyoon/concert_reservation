@@ -57,17 +57,17 @@ public class ReservationServiceIntegrationTest {
         Long concertId = 1L;
         List<ReservationSeat> reservationSeats = new ArrayList<>();
         reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(15L)
+                                            .seatId(18L)
                                             .scheduleId(scheduleId)
                                             .concertId(concertId)
                                             .build());
         reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(16L)
+                                            .seatId(19L)
                                             .scheduleId(scheduleId)
                                             .concertId(concertId)
                                             .build());
         reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(17L)
+                                            .seatId(20L)
                                             .scheduleId(scheduleId)
                                             .concertId(concertId)
                                             .build());

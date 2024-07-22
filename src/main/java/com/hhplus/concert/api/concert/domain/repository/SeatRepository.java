@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface SeatRepository extends JpaRepository<Seat, Long> {
     List<Seat> findByScheduleIdAndSeatStatus(Long scheduleId, SeatStatus seatStatus);
-    @Lock(LockModeType.OPTIMISTIC)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT s FROM Seat s WHERE s.seatId IN :seatIds AND s.seatStatus = :status")
-    List<Seat> findAllBySeatIdAndSeatStatus(@Param("seatIds") List<Long> seatIds, @Param("status") SeatStatus status);
+    List<Seat> findAllBySeatIdAndSeatStatusForUpdate(@Param("seatIds") List<Long> seatIds, @Param("status") SeatStatus status);
 }

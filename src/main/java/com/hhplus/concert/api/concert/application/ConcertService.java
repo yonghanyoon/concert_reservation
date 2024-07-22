@@ -7,15 +7,13 @@ import com.hhplus.concert.api.concert.domain.repository.ConcertRepository;
 import com.hhplus.concert.api.concert.domain.type.SeatStatus;
 import com.hhplus.concert.api.concert.domain.repository.ScheduleRepository;
 import com.hhplus.concert.api.concert.domain.repository.SeatRepository;
-import com.hhplus.concert.common.exception.list.CustomBadRequestException;
 import com.hhplus.concert.common.exception.list.CustomNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.OptimisticLockException;
+import jakarta.persistence.PessimisticLockException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,7 +82,7 @@ public class ConcertService {
 
     public void optimisticSeat(List<Long> seatIds, Long userId) {
         try {
-            List<Seat> seats = seatRepository.findAllBySeatIdAndSeatStatus(seatIds, SeatStatus.AVAILABLE);
+            List<Seat> seats = seatRepository.findAllBySeatIdAndSeatStatusForUpdate(seatIds, SeatStatus.AVAILABLE);
             if (seats.size() == 0) {
                 log.info("[좌석 예약] 이미 예약된 좌석입니다.");
                 throw new EntityNotFoundException("이미 예약된 좌석입니다.");
@@ -93,9 +91,9 @@ public class ConcertService {
                 seat.updateSeatStatus(SeatStatus.IMPOSSIBLE, userId);
             }
             seatRepository.saveAll(seats);
-        } catch (OptimisticLockingFailureException | OptimisticLockException e) {
-            log.warn("[좌석 예약] 낙관적 락 충돌 발생");
-            throw new OptimisticLockException("OptimisticLock 충돌");
+        } catch (PessimisticLockException e) {
+            log.warn("[좌석 예약] 비관적 락 충돌 발생");
+            throw new PessimisticLockException("PessimisticLock 충돌");
         }
     }
 
