@@ -21,12 +21,12 @@ public class BalanceService {
 
     @Transactional
     public Balance putCharge(Balance balance) {
-        Balance selectBalance = balanceRepository.findByUserId(balance.getUserId()).orElseThrow(() -> {
+        Balance selectBalance = balanceRepository.findByUserIdForUpdate(balance.getUserId()).orElseThrow(() -> {
             log.warn(String.format("[잔액 충전] userId : %d -> 존재하지 않는 사용자", balance.getUserId()));
             throw new EntityNotFoundException("존재하지 않는 사용자");
         });
-        balance.putCharge(selectBalance.getBalanceId(), balance.getAmount(), LocalDateTime.now());
-        return balanceRepository.save(balance);
+        selectBalance.putCharge(selectBalance.getBalanceId(), balance.getAmount(), LocalDateTime.now());
+        return selectBalance;
     }
 
     @Transactional(readOnly = true)
@@ -37,8 +37,9 @@ public class BalanceService {
         });
     }
 
+    @Transactional
     public void useBalance(Long userId, Long amount) {
-        Balance balance = balanceRepository.findByUserId(userId).orElseThrow(() -> {
+        Balance balance = balanceRepository.findByUserIdForUpdate(userId).orElseThrow(() -> {
             log.warn(String.format("[결제 잔액 차감] userId : %d -> 존재하지 않는 사용자", userId));
             throw new EntityNotFoundException("존재하지 않는 사용자");
         });
