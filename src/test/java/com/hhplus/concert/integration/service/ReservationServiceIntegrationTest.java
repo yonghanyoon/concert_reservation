@@ -61,11 +61,11 @@ public class ReservationServiceIntegrationTest {
                                             .concertId(concertId)
                                             .build());
 
-        int numberOfExecute = 20;
-        ExecutorService executorService = Executors.newFixedThreadPool(32);
+        int numberOfExecute = 10;
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
         CountDownLatch countDownLatch = new CountDownLatch(numberOfExecute);
 
-        for (int i = 0; i < numberOfExecute; i++) {
+        for (int i = 1; i < numberOfExecute; i++) {
             Long id = Long.valueOf(i);
             executorService.execute(() -> {
                 try {

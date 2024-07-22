@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,9 @@ public class Balance {
     private Long amount;
     @Column(name = "MOD_DT")
     private LocalDateTime modDt;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
 
     public void putCharge(Long balanceId, Long amount, LocalDateTime modDt) {
         this.balanceId = balanceId;

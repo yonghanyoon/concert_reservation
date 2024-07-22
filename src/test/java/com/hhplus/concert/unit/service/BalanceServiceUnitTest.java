@@ -18,7 +18,7 @@ public class BalanceServiceUnitTest {
     @Test
     public void putChargeTest() {
         // given
-        Balance balance = new Balance(1L, 1L, 1000L, LocalDateTime.of(2024, 6, 28, 12, 0));
+        Balance balance = new Balance(1L, 1L, 1000L, LocalDateTime.of(2024, 6, 28, 12, 0), 0L);
 
         // when
         when(balanceService.putCharge(balance)).thenReturn(balance);
@@ -35,7 +35,7 @@ public class BalanceServiceUnitTest {
     public void getBalanceTest() {
         // given
         Long userId = 1L;
-        Balance balance = new Balance(1L, userId, 1000L, LocalDateTime.of(2024, 6, 28, 12, 0));
+        Balance balance = new Balance(1L, userId, 1000L, LocalDateTime.of(2024, 6, 28, 12, 0), 0L);
 
         // when
         when(balanceService.getBalance(userId)).thenReturn(balance);
