@@ -38,29 +38,30 @@ public class ReservationService {
 
     @Transactional
     public Reservation postReservationSeat(Reservation reservation) {
-        List<Long> seatIds = reservation.getReservationSeats().stream().map(i -> i.getSeatId()).collect(
-            Collectors.toList());
-        reservation.updateReservation(concertService.getConcertTitle(reservation.getConcertId()),
-                                      ReservationStatus.STANDBY,
-                                      LocalDateTime.now().plusMinutes(10),
-                                      concertService.getSeatTotalPrice(seatIds));
-        reservationRepository.save(reservation);
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.findAllBySeatIdInAndScheduleIdAndConcertId(seatIds,
-                                                                                                      reservation.getScheduleId(),
-                                                                                                      reservation.getConcertId());
-        if (reservationSeats.size() != 0) {
-            log.warn("[좌석 예약] seatId : " + reservationSeats.stream().map(ReservationSeat::getSeatId).collect(
-                Collectors.toList()) + " -> 이미 예약된 좌석입니다.");
-            throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "이미 예약된 좌석입니다.");
-        }
-        for (ReservationSeat item : reservation.getReservationSeats()) {
-            ReservationSeat seat = new ReservationSeat(item.getSeatId(), item.getScheduleId(), item.getConcertId(),
-                                                       reservation.getReservationId());
-            reservationSeats.add(seat);
-        }
-        reservationSeatRepository.saveAll(reservationSeats);
+        List<Long> seatIds = reservation.getReservationSeats().stream()
+                                        .map(i -> i.getSeatId())
+                                        .collect(Collectors.toList());
 
-        concertService.seatStatusUpdate(seatIds, SeatStatus.IMPOSSIBLE, reservation.getUserId());
+        concertService.optimisticSeat(seatIds, reservation.getUserId());
+
+        reservation.updateReservation(
+            concertService.getConcertTitle(reservation.getConcertId()),
+            ReservationStatus.STANDBY,
+            LocalDateTime.now().plusMinutes(10),
+            concertService.getSeatTotalPrice(seatIds)
+        );
+        reservationRepository.save(reservation);
+        List<ReservationSeat> reservationSeats = reservation.getReservationSeats().stream()
+                                                            .map(item -> ReservationSeat.builder()
+                                                                                        .seatId(item.getSeatId())
+                                                                                        .scheduleId(item.getScheduleId())
+                                                                                        .concertId(item.getConcertId())
+                                                                                        .reservationId(reservation.getReservationId())
+                                                                                        .reservationStatus(ReservationStatus.STANDBY)
+                                                                                        .build())
+                                                            .collect(Collectors.toList());
+
+        reservationSeatRepository.saveAll(reservationSeats);
         return reservation;
     }
 
@@ -84,13 +85,15 @@ public class ReservationService {
     public void reservationExpiredCheck() {
         List<Reservation> expiredReservation = reservationRepository.findAllByReservationStatusAndReservationExpiryBefore(ReservationStatus.STANDBY, LocalDateTime.now());
         if (expiredReservation.size() == 0) return;
-        List<Long> seats = new ArrayList<>();
+        List<ReservationSeat> reservationSeats = new ArrayList<>();
         for (Reservation reservation : expiredReservation) {
             reservation.updateReservationStatus(ReservationStatus.CANCEL);
             log.info(String.format("[ReservationScheduler] reservationId : %d -> 예약 시간 만료", reservation.getReservationId()));
-            seats.addAll(reservation.getReservationSeats().stream().map(ReservationSeat::getSeatId).toList());
+            reservationSeats.addAll(reservation.getReservationSeats());
         }
-        concertService.seatStatusUpdate(seats, SeatStatus.AVAILABLE, null);
-        reservationSeatRepository.deleteAllBySeatIdIn(seats);
+        concertService.seatStatusUpdate(reservationSeats.stream().map(ReservationSeat::getSeatId).toList(), SeatStatus.AVAILABLE, null);
+        for (ReservationSeat reservationSeat : reservationSeats) {
+            reservationSeat.updateReservationStatus(ReservationStatus.CANCEL);
+        }
     }
 }
