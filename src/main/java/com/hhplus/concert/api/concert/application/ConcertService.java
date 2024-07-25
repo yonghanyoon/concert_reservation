@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 public class ConcertService {
+
     private final ConcertRepository concertRepository;
     private final ScheduleRepository scheduleRepository;
     private final SeatRepository seatRepository;
@@ -39,7 +40,8 @@ public class ConcertService {
 
     @Transactional
     public List<Schedule> getSchedules(Long concertId) {
-        List<Schedule> schedules = scheduleRepository.findByConcertIdAndScheduleDateAfter(concertId, LocalDateTime.now());
+        List<Schedule> schedules = scheduleRepository.findByConcertIdAndScheduleDateAfter(concertId,
+                                                                                          LocalDateTime.now());
         if (schedules.size() == 0) {
             log.info(String.format("[예약 가능 일정 조회] concertId : %d -> 예약 가능한 일정이 없습니다.", concertId));
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "예약 가능한 일정이 없습니다.");
@@ -49,9 +51,11 @@ public class ConcertService {
 
     @Transactional
     public List<Seat> getSeats(Long scheduleId) {
-        List<Seat> seats = seatRepository.findByScheduleIdAndSeatStatus(scheduleId, SeatStatus.AVAILABLE);
+        List<Seat> seats = seatRepository.findByScheduleIdAndSeatStatus(scheduleId,
+                                                                        SeatStatus.AVAILABLE);
         if (seats.size() == 0) {
-            log.info(String.format("[예약 가능 좌석 조회] scheduleId : %d -> 예약 가능한 좌석이 없습니다.", scheduleId));
+            log.info(
+                String.format("[예약 가능 좌석 조회] scheduleId : %d -> 예약 가능한 좌석이 없습니다.", scheduleId));
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "예약 가능한 좌석이 없습니다.");
         }
         return seats;
@@ -81,21 +85,18 @@ public class ConcertService {
         }
     }
 
-    public void optimisticSeat(List<Long> seatIds, Long userId) {
-        try {
-            List<Seat> seats = seatRepository.findAllBySeatIdAndSeatStatus(seatIds, SeatStatus.AVAILABLE);
-            if (seats.size() == 0) {
-                log.info("[좌석 예약] 이미 예약된 좌석입니다.");
-                throw new EntityNotFoundException("이미 예약된 좌석입니다.");
-            }
-            for (Seat seat : seats) {
-                seat.updateSeatStatus(SeatStatus.IMPOSSIBLE, userId);
-            }
-            seatRepository.saveAll(seats);
-        } catch (OptimisticLockingFailureException | OptimisticLockException e) {
-            log.warn("[좌석 예약] 낙관적 락 충돌 발생");
-            throw new OptimisticLockException("OptimisticLock 충돌");
+    @Transactional
+    public void redLockSeat(List<Long> seatIds, Long userId) {
+        List<Seat> seats = seatRepository.findAllBySeatIdInAndSeatStatus(seatIds,
+                                                                       SeatStatus.AVAILABLE);
+        if (seats.size() == 0) {
+            log.info("[좌석 예약] 이미 예약된 좌석입니다.");
+            throw new EntityNotFoundException("이미 예약된 좌석입니다.");
         }
+        for (Seat seat : seats) {
+            seat.updateSeatStatus(SeatStatus.IMPOSSIBLE, userId);
+        }
+        seatRepository.saveAll(seats);
     }
 
 }

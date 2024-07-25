@@ -57,30 +57,21 @@ public class ReservationServiceIntegrationTest {
         Long concertId = 1L;
         List<ReservationSeat> reservationSeats = new ArrayList<>();
         reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(15L)
-                                            .scheduleId(scheduleId)
-                                            .concertId(concertId)
-                                            .build());
-        reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(16L)
-                                            .scheduleId(scheduleId)
-                                            .concertId(concertId)
-                                            .build());
-        reservationSeats.add(ReservationSeat.builder()
-                                            .seatId(17L)
+                                            .seatId(10L)
                                             .scheduleId(scheduleId)
                                             .concertId(concertId)
                                             .build());
 
-        int numberOfExecute = 11;
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+        int numberOfExecute = 3001;
+        ExecutorService executorService = Executors.newFixedThreadPool(3000);
         CountDownLatch countDownLatch = new CountDownLatch(numberOfExecute);
 
         for (int i = 1; i <= numberOfExecute; i++) {
             Long id = Long.valueOf(i);
             executorService.execute(() -> {
                 try {
-                    reservationService.postReservationSeat(Reservation.builder()
+                    reservationService.reservationLock(Reservation.builder()
                                                                       .userId(id)
                                                                       .concertId(concertId)
                                                                       .scheduleId(scheduleId)
