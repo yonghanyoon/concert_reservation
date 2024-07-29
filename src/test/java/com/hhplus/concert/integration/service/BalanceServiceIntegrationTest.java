@@ -114,7 +114,7 @@ public class BalanceServiceIntegrationTest {
         assertEquals(beforeBalance.getAmount() + amount, afterBalance.getAmount());
     }
 
-    @DisplayName("잔액 충전 동시성 테스트")
+    @DisplayName("잔액 사용 동시성 테스트")
     @Test
     public void concurrent_use_test() throws InterruptedException {
         // given
