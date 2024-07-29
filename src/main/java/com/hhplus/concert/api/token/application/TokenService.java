@@ -73,6 +73,7 @@ public class TokenService {
     }
 
     // 결제 완료 토큰 만료
+    @Transactional
     public void tokenExpired(String uuid) {
         QueueToken queueToken = queueTokenRepository.findByUuid(uuid).get();
         queueToken.updateExpired(TokenStatus.EXPIRED);

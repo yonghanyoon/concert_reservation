@@ -34,9 +34,6 @@ public class Seat {
     private Long price;
     @Column(name = "USER_ID")
     private Long userId;
-    @Version
-    @Column(name = "VERSION")
-    private Long version;
 
     public void updateSeatStatus(SeatStatus seatStatus, Long userId) {
         this.seatStatus = seatStatus;

@@ -27,7 +27,22 @@ spring:
         # JPA 기본 매핑전략을 변경해줌. (대문자 컬럼 바인딩)
         # JPA의 기본 매핑 전략 : 모든 도트는 밑줄로 대체, Camel Case 대문자는 밑줄로 대체, 모든 테이블은 소문자로 구성.
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-
+  data:
+    redis:
+      hosts: localhost
+      ports: 6379,6379
+      node-type: s    #s=standard alone/ m=master slave
+      ttl: 2
+      timeout: 5000
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 20
+          max-wait: 3000
+          min-idle: 10
+          time-between-eviction-runs: 1000
+      reservation-key: RESERVATION_KEY
+      payment-key: PAYMENT_KEY
 springdoc:
   version: v1 # API 문서 버전
   api-docs:

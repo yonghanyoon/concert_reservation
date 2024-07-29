@@ -1,5 +1,7 @@
 # 콘서트 예약 서비스
 
+### [락 비교 보고서](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/lock.md)
+-----
 ### [Milestone](https://github.com/users/yonghanyoon/projects/1)
 -----
 ### [Sequence Diagram](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/concert_flow.svg)
