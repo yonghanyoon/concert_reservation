@@ -1,16 +1,16 @@
 # 콘서트 예약 서비스
 
-### [락 비교 보고서](https://github.com/yonghanyoon/concert_reservation/blob/feature/redis/Docs/lock.md)
+### [락 비교 보고서](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/lock.md)
 -----
 ### [Milestone](https://github.com/users/yonghanyoon/projects/1)
 -----
-### [Sequence Diagram](https://github.com/yonghanyoon/concert_reservation/blob/feature/redis/Docs/concert_flow.svg)
+### [Sequence Diagram](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/concert_flow.svg)
 -----
-### [ERD](https://github.com/yonghanyoon/concert_reservation/blob/feature/redis/Docs/concert_erd.svg)
+### [ERD](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/concert_erd.svg)
 -----
-### [ApiSpecs](https://github.com/yonghanyoon/concert_reservation/blob/feature/redis/Docs/api_spec.md)
+### [ApiSpecs](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/api_spec.md)
 -----
-### [Swagger](https://github.com/yonghanyoon/concert_reservation/blob/feature/redis/Docs/swagger.md)
+### [Swagger](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/swagger.md)
 -----
 1️⃣ **`주요` 유저 대기열 토큰 기능**
 
