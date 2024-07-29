@@ -48,17 +48,38 @@ public class ReservationService {
 
     public Reservation reservationLock(Reservation reservation) {
         String ranValue = UUID.randomUUID().toString();
-        if (redisRepository.addLock(reservationKey, ranValue, 2L, TimeUnit.SECONDS)) {
+        if (redisRepository.addLock(reservationKey, ranValue, 5L, TimeUnit.SECONDS)) {
             log.info("[좌석 예약] Lock 획득");
             try {
-                transactionHandler.runWithTransaction((r) -> postReservationSeat(reservation));
+                transactionHandler.runWithTransaction(this::postReservationSeat, reservation);
             } finally {
                 redisRepository.delLock(reservationKey, ranValue);
                 log.info("[좌석 예약] Lock 해제");
             }
+        } else {
+            log.warn("[좌석 예약] Lock 획득 실패");
+            throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "락 획득 실패");
         }
         return reservation;
     }
+
+    public PaymentHistory paymentLock(String uuid, PaymentHistory paymentHistory) {
+        String ranValue = UUID.randomUUID().toString();
+        if (redisRepository.addLock(paymentKey, ranValue, 5L, TimeUnit.SECONDS)) {
+            log.info("[결제 히스토리] Lock 획득");
+            try {
+                transactionHandler.runWithTransaction(this::postPayment, uuid, paymentHistory);
+            } finally {
+                redisRepository.delLock(paymentKey, ranValue);
+                log.info("[결제 히스토리] Lock 해제");
+            }
+        } else {
+            log.warn("[결제 히스토리] Lock 획득 실패");
+            throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "락 획득 실패");
+        }
+        return paymentHistory;
+    }
+
     public Reservation postReservationSeat(Reservation reservation) {
         log.info("[좌석 예약] Transaction 시작");
         List<Long> seatIds = reservation.getReservationSeats().stream()
