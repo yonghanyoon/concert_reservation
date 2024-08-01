@@ -28,7 +28,7 @@ public class ConcertServiceIntegrationTest {
     void get_concerts_test() {
         // given
         // when
-        List<Concert> concerts = concertService.getConcerts();
+        List<Concert> concerts = concertService.getConcerts(0, 10);
         // then
         assertEquals(concerts.get(0).getConcertId(), 1L);
         assertEquals(concerts.get(0).getTitle(), "발라드 황제 이석범 콘서트");

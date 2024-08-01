@@ -9,12 +9,15 @@ import com.hhplus.concert.api.concert.domain.repository.ScheduleRepository;
 import com.hhplus.concert.api.concert.domain.repository.SeatRepository;
 import com.hhplus.concert.common.exception.list.CustomNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.OptimisticLockException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,16 +31,19 @@ public class ConcertService {
     private final ScheduleRepository scheduleRepository;
     private final SeatRepository seatRepository;
 
+    @Cacheable(value = "concertsPage: ", key = "#page")
     @Transactional
-    public List<Concert> getConcerts() {
-        List<Concert> concerts = concertRepository.findAll();
-        if (concerts.size() == 0) {
+    public List<Concert> getConcerts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Concert> concerts = concertRepository.findAll(pageable);
+        if (concerts.getContent().size() == 0) {
             log.info("[콘서트 조회] -> 콘서트가 없습니다.");
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "콘서트가 없습니다.");
         }
-        return concerts;
+        return concerts.getContent();
     }
 
+    @Cacheable(value = "schedules: ", key = "#concertId")
     @Transactional
     public List<Schedule> getSchedules(Long concertId) {
         List<Schedule> schedules = scheduleRepository.findByConcertIdAndScheduleDateAfter(concertId,
@@ -49,6 +55,7 @@ public class ConcertService {
         return schedules;
     }
 
+    @Cacheable(value = "seats: ", key = "#scheduleId")
     @Transactional
     public List<Seat> getSeats(Long scheduleId) {
         List<Seat> seats = seatRepository.findByScheduleIdAndSeatStatus(scheduleId,
@@ -78,7 +85,8 @@ public class ConcertService {
         return seatTotalPrice;
     }
 
-    public void seatStatusUpdate(List<Long> seatIds, SeatStatus seatStatus, Long userId) {
+    @CacheEvict(value = "seats: ", key = "#scheduleId")
+    public void seatStatusUpdate(Long scheduleId, List<Long> seatIds, SeatStatus seatStatus, Long userId) {
         List<Seat> seats = seatRepository.findAllById(seatIds);
         for (Seat seat : seats) {
             seat.updateSeatStatus(seatStatus, userId);
