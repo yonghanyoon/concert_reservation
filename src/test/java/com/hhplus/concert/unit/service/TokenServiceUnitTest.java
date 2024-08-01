@@ -4,7 +4,7 @@
 //import static org.mockito.Mockito.when;
 //
 //import com.hhplus.concert.api.token.application.TokenService;
-//import com.hhplus.concert.api.token.domain.entity.QueueToken;
+//import com.hhplus.concert.api.token.domain.QueueToken;
 //import com.hhplus.concert.api.token.domain.type.TokenStatus;
 //import java.time.LocalDateTime;
 //import org.junit.jupiter.api.DisplayName;
