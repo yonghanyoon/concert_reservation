@@ -72,7 +72,7 @@ public class ReservationServiceIntegrationTest {
             Long id = Long.valueOf(i);
             executorService.execute(() -> {
                 try {
-                    reservationService.reservationLock(Reservation.builder()
+                    reservationService.postReservationSeat(Reservation.builder()
                                                                       .userId(id)
                                                                       .concertId(concertId)
                                                                       .scheduleId(scheduleId)
@@ -117,7 +117,7 @@ public class ReservationServiceIntegrationTest {
         for (int i = 1; i <= numberOfExecute; i++) {
             executorService.execute(() -> {
                 try {
-                    reservationService.paymentLock(uuid, paymentHistory);
+                    reservationService.postPayment(uuid, paymentHistory);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 } finally {
