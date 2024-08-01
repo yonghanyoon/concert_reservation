@@ -28,11 +28,11 @@ public class ConcertServiceUnitTest {
         concerts.add(concert);
 
         // when
-        when(concertService.getConcerts()).thenReturn(concerts);
+        when(concertService.getConcerts(0, 10)).thenReturn(concerts);
 
         // then
-        assertThat(concertService.getConcerts().get(0).getConcertId()).isEqualTo(1L);
-        assertThat(concertService.getConcerts().get(0).getTitle()).isEqualTo("콘서트 테스트");
+        assertThat(concertService.getConcerts(0, 10).get(0).getConcertId()).isEqualTo(1L);
+        assertThat(concertService.getConcerts(0, 10).get(0).getTitle()).isEqualTo("콘서트 테스트");
     }
 
     @DisplayName("예약 가능 일정 조회 테스트")
