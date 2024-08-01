@@ -41,8 +41,9 @@ spring:
           max-wait: 3000
           min-idle: 10
           time-between-eviction-runs: 1000
-      reservation-key: RESERVATION_KEY
-      payment-key: PAYMENT_KEY
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
 springdoc:
   version: v1 # API 문서 버전
   api-docs:
