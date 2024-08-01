@@ -28,14 +28,14 @@ public class ReservationController {
     // 좌석 예약 요청 API
     @Operation(summary = "좌석 예약 요청 API")
     @PostMapping("/seats")
-    public ResponseEntity<ReservationResDTO> postReservationSeat(@RequestHeader String uuid, ReservationReqDTO reqVo) {
+    public ResponseEntity<ReservationResDTO> postReservationSeat(@RequestHeader Long userId, ReservationReqDTO reqVo) {
         return ResponseEntity.ok(ReservationMapper.toDto(reservationService.postReservationSeat(ReservationMapper.toEntity(reqVo))));
     }
 
     // 결제 API
     @Operation(summary = "결제 API")
     @PostMapping("/payments")
-    public ResponseEntity<PaymentResDTO> postPayment(@RequestHeader String uuid, PaymentReqDTO reqVo) {
-        return ResponseEntity.ok(ReservationMapper.toDtoFromPayment(reservationService.postPayment(uuid, ReservationMapper.toEntityFromPayment(reqVo))));
+    public ResponseEntity<PaymentResDTO> postPayment(@RequestHeader Long userId, PaymentReqDTO reqVo) {
+        return ResponseEntity.ok(ReservationMapper.toDtoFromPayment(reservationService.postPayment(userId, ReservationMapper.toEntityFromPayment(reqVo))));
     }
 }

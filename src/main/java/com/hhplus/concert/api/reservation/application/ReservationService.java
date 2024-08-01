@@ -68,7 +68,7 @@ public class ReservationService {
     }
 
     @RedisLock(key = "'paymentLock:' + #paymentHistory.reservationId", timeout = 5000)
-    public PaymentHistory postPayment(String uuid, PaymentHistory paymentHistory) {
+    public PaymentHistory postPayment(Long userId, PaymentHistory paymentHistory) {
         reservationRepository.findByReservationIdAndUserId(
             paymentHistory.getReservationId(), paymentHistory.getUserId()).orElseThrow(() -> {
                 log.warn(String.format("[결제 히스토리] reservationId : %d -> 예약 정보가 없습니다.", paymentHistory.getReservationId()));
@@ -78,7 +78,7 @@ public class ReservationService {
         paymentHistory.updatePaymentStatus(PaymentStatus.SUCCESS, LocalDateTime.now());
         paymentHistoryRepository.save(paymentHistory);
         balanceService.useBalance(paymentHistory.getUserId(), paymentHistory.getAmount());
-        tokenService.tokenExpired(uuid);
+        tokenService.tokenExpired(userId);
 
         return paymentHistory;
     }

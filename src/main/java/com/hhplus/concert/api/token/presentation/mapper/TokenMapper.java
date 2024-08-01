@@ -1,6 +1,6 @@
 package com.hhplus.concert.api.token.presentation.mapper;
 
-import com.hhplus.concert.api.token.domain.entity.QueueToken;
+import com.hhplus.concert.api.token.domain.QueueToken;
 import com.hhplus.concert.api.token.presentation.dto.request.TokenReqDTO;
 import com.hhplus.concert.api.token.presentation.dto.response.TokenResDTO;
 
