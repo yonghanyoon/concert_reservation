@@ -1,13 +1,12 @@
 package com.hhplus.concert.api.token.presentation.mapper;
 
 import com.hhplus.concert.api.token.domain.entity.QueueToken;
-import com.hhplus.concert.api.token.presentation.dto.request.TokenPostReqDTO;
-import com.hhplus.concert.api.token.presentation.dto.response.TokenGetResDTO;
-import com.hhplus.concert.api.token.presentation.dto.response.TokenPostResDTO;
+import com.hhplus.concert.api.token.presentation.dto.request.TokenReqDTO;
+import com.hhplus.concert.api.token.presentation.dto.response.TokenResDTO;
 
 public class TokenMapper {
 
-    public static QueueToken toEntity(TokenPostReqDTO dto) {
+    public static QueueToken toEntity(TokenReqDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -17,25 +16,15 @@ public class TokenMapper {
         return queueToken;
     }
 
-    public static TokenPostResDTO toDtoFromPost(QueueToken queueToken) {
+    public static TokenResDTO toDto(QueueToken queueToken) {
         if (queueToken == null) {
             return null;
         }
-        TokenPostResDTO dto = new TokenPostResDTO().builder()
-            .uuid(queueToken.getUuid())
-            .build();
-        return dto;
-    }
-
-    public static TokenGetResDTO toDtoFromGet(QueueToken queueToken) {
-        if (queueToken == null) {
-            return null;
-        }
-        TokenGetResDTO dto = new TokenGetResDTO().builder()
-            .position(queueToken.getPosition())
-            .tokenStatus(queueToken.getTokenStatus())
-            .expirationTime(queueToken.getExpirationTime())
-            .build();
+        TokenResDTO dto = new TokenResDTO().builder()
+                                           .userId(queueToken.getUserId())
+                                           .position(queueToken.getPosition())
+                                           .waitingTime(queueToken.getWaitingTime())
+                                           .build();
         return dto;
     }
 
