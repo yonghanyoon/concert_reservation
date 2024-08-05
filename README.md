@@ -1,5 +1,7 @@
 # 콘서트 예약 서비스
 
+### [대기열 보고서](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/waiting.md)
+-----
 ### [캐싱 보고서](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/cache.md)
 -----
 ### [락 비교 보고서](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/lock.md)
