@@ -8,12 +8,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Schema(description = "유저 대기열 토큰 발급 요청 DTO")
+@Schema(description = "유저 대기열 토큰 요청 DTO")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class TokenPostReqDTO {
+public class TokenReqDTO {
     @Schema(description = "사용자 ID")
     @Positive
     @NotNull(message = "userId는 null일 수 없습니다.")

@@ -69,3 +69,9 @@ springdoc:
 
 server:
   port: 8080
+
+token:
+  waiting:
+    active: 952
+    waiting-key: WaitingTokens
+  active-key: ActiveTokens

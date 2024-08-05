@@ -16,13 +16,13 @@ public class TokenHeaderInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String uuid = request.getHeader("uuid");
+        Long userId = Long.valueOf(request.getHeader("userId"));
 
-        if (uuid == null) {
-            response.sendError(HttpStatus.BAD_REQUEST.value(), "UUID가 존재하지 않습니다.");
+        if (userId == null) {
+            response.sendError(HttpStatus.BAD_REQUEST.value(), "userId가 존재하지 않습니다.");
             return false;
         }
-        tokenService.tokenStatusCheck(uuid);
+        tokenService.tokenActiveCheck(userId);
         return true;
     }
 

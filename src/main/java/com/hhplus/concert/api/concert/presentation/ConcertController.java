@@ -30,7 +30,7 @@ public class ConcertController {
     // 콘서트 조회 API
     @Operation(summary = "콘서트 조회 API")
     @GetMapping("")
-    public ResponseEntity<List<ConcertResDTO>> getConcerts(@RequestHeader String uuid, @RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<List<ConcertResDTO>> getConcerts(@RequestHeader Long userId, @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(ConcertMapper.toDtoFromConcert(concertService.getConcerts(page, size)));
     }
@@ -38,14 +38,14 @@ public class ConcertController {
     // 예약 가능 날짜 조회 API
     @Operation(summary = "예약 가능 날짜 조회 API")
     @GetMapping("/schedules/{contentId}")
-    public ResponseEntity<List<ScheduleResDTO>> getSchedules(@RequestHeader String uuid, @PathVariable Long contentId) {
+    public ResponseEntity<List<ScheduleResDTO>> getSchedules(@RequestHeader Long userId, @PathVariable Long contentId) {
         return ResponseEntity.ok(ConcertMapper.toDtoFromSchedule(concertService.getSchedules(contentId)));
     }
 
     // 해당 날짜 예약 가능 좌석 조회 API
     @Operation(summary = "해당 날짜 예약 가능 좌석 조회 API")
     @GetMapping("/seats/{scheduleId}")
-    public ResponseEntity<List<SeatResDTO>> getSeats(@RequestHeader String uuid, @PathVariable Long scheduleId) {
+    public ResponseEntity<List<SeatResDTO>> getSeats(@RequestHeader Long userId, @PathVariable Long scheduleId) {
         return ResponseEntity.ok(ConcertMapper.toDtoFromSeat(concertService.getSeats(scheduleId)));
     }
 }
