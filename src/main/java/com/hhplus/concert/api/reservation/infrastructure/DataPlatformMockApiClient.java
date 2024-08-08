@@ -12,9 +12,9 @@ public class DataPlatformMockApiClient {
 
     public void sendData(Reservation reservation, List<ReservationSeat> reservationSeats) {
         try {
-            log.info("DataPlatform : 좌석 예약 데이터 저장 성공 => " + reservationSeats.stream().map(ReservationSeat::getSeatId).toList());
+            log.info("[DataPlatform] : 좌석 예약 데이터 저장 성공 => " + reservationSeats.stream().map(ReservationSeat::getSeatId).toList());
         } catch (Exception e) {
-            log.error("DataPlatform : 좌석 예약 데이터 저장 실패 => " + e.getMessage());
+            log.error("[DataPlatform] : 좌석 예약 데이터 저장 실패 => " + e.getMessage());
         }
     }
 }

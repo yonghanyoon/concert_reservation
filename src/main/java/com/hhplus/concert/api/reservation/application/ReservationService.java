@@ -79,9 +79,9 @@ public class ReservationService {
                 throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "예약 정보가 없습니다.");
             });
 
+        balanceService.useBalance(paymentHistory.getUserId(), paymentHistory.getAmount());
         paymentHistory.updatePaymentStatus(PaymentStatus.SUCCESS, LocalDateTime.now());
         paymentHistoryRepository.save(paymentHistory);
-        balanceService.useBalance(paymentHistory.getUserId(), paymentHistory.getAmount());
         tokenService.tokenExpired(userId);
 
         return paymentHistory;
