@@ -2,6 +2,7 @@ package com.hhplus.concert.api.reservation.application;
 
 import com.hhplus.concert.api.balance.application.BalanceService;
 import com.hhplus.concert.api.concert.domain.type.SeatStatus;
+import com.hhplus.concert.api.reservation.domain.event.ReservationEvent;
 import com.hhplus.concert.api.token.application.TokenService;
 import com.hhplus.concert.api.concert.application.ConcertService;
 import com.hhplus.concert.api.reservation.domain.entity.PaymentHistory;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +38,10 @@ public class ReservationService {
     private final TokenService tokenService;
     private final ConcertService concertService;
     private final BalanceService balanceService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @CacheEvict(value = "seats: ", key = "#reservation.scheduleId")
-    @RedisLock(key = "'reservationLock:' + #reservation.concertId + ':' + #reservation.scheduleId + ':' + #reservation.reservationSeats", timeout = 5000)
+    @Transactional
     public Reservation postReservationSeat(Reservation reservation) {
         List<Long> seatIds = reservation.getReservationSeats().stream()
                                         .map(i -> i.getSeatId())
@@ -64,6 +67,7 @@ public class ReservationService {
                                                             .collect(Collectors.toList());
 
         reservationSeatRepository.saveAll(reservationSeats);
+        eventPublisher.publishEvent(new ReservationEvent(this, reservation, reservationSeats));
         return reservation;
     }
 
