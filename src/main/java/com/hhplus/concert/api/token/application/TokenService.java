@@ -4,6 +4,7 @@ import com.hhplus.concert.api.token.domain.QueueToken;
 import com.hhplus.concert.api.token.infrastructure.redis.repository.TokenRedisRepository;
 import com.hhplus.concert.common.exception.list.CustomBadRequestException;
 import com.hhplus.concert.common.exception.list.CustomForbiddenException;
+import com.hhplus.concert.common.exception.list.CustomNotFoundException;
 import java.sql.Timestamp;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,12 @@ public class TokenService {
     }
 
     public QueueToken getWaitingToken(Long userId) {
-        Long position = tokenRedisRepository.zRank(userId) + 1;
+        Long position = tokenRedisRepository.zRank(userId);
+        if (position == null) {
+            log.warn(String.format("[대기열 토큰 조회] userId : %d -> 존재하지 않는 토큰", userId));
+            throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "존재하지 않는 토큰");
+        }
+        position += 1;
         Long waitingSeconds = position / active * 10;
         Long hours = waitingSeconds / 3600;
         Long minutes = (waitingSeconds % 3600) / 60;
