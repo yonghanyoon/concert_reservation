@@ -32,7 +32,7 @@ public class ConcertService {
     private final SeatRepository seatRepository;
 
     @Cacheable(value = "concertsPage: ", key = "#page")
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Concert> getConcerts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Concert> concerts = concertRepository.findAll(pageable);
@@ -44,7 +44,7 @@ public class ConcertService {
     }
 
     @Cacheable(value = "schedules: ", key = "#concertId")
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Schedule> getSchedules(Long concertId) {
         List<Schedule> schedules = scheduleRepository.findByConcertIdAndScheduleDateAfter(concertId,
                                                                                           LocalDateTime.now());
@@ -56,7 +56,7 @@ public class ConcertService {
     }
 
     @Cacheable(value = "seats: ", key = "#scheduleId")
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Seat> getSeats(Long scheduleId) {
         List<Seat> seats = seatRepository.findByScheduleIdAndSeatStatus(scheduleId,
                                                                         SeatStatus.AVAILABLE);
