@@ -45,7 +45,6 @@ public class KafkaConfig {
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "reservation-group");
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),
                                                  new ErrorHandlingDeserializer<>(new JsonDeserializer<>(ReservationEvent.class)));
     }
