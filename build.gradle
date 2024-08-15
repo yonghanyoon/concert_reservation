@@ -45,6 +45,13 @@ dependencies {
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3'
 
 	implementation 'org.springframework.kafka:spring-kafka'
+
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testImplementation 'org.springframework.kafka:spring-kafka'
+	testImplementation 'org.springframework:spring-test'
+
+	testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
+	testImplementation 'org.testcontainers:kafka:1.19.0'
 }
 
 tasks.named('test') {
