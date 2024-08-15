@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataPlatformMockApiClient {
 
-    public void sendData(List<Long> seatIds) {
+    public boolean sendData(List<Long> seatIds) {
         try {
             log.info("[DataPlatform] : 좌석 예약 데이터 저장 성공 => " + seatIds);
+            return true;
         } catch (Exception e) {
             log.error("[DataPlatform] : 좌석 예약 데이터 저장 실패 => " + e.getMessage());
+            return false;
         }
     }
 }
