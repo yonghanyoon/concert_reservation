@@ -18,6 +18,6 @@ public class ReservationEventListener {
     @Async
     @TransactionalEventListener(phase = AFTER_COMMIT)
     public void sendReservationInfo(ReservationEvent event) {
-        kafkaReservationProducer.sendReservationEvent(new ReservationEvent(event.getMessageId(), event.getSeatIds()));
+        kafkaReservationProducer.send(new ReservationEvent(event.getMessageId(), event.getSeatIds()));
     }
 }

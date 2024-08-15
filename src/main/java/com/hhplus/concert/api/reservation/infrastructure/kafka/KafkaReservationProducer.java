@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class KafkaReservationProducer {
     private final KafkaTemplate<String, ReservationEvent> kafkaTemplate;
 
-    public void sendReservationEvent(ReservationEvent event) {
+    public void send(ReservationEvent event) {
         kafkaTemplate.send("reservation-topic", "reservation", event);
     }
 }
