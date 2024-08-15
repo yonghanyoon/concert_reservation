@@ -114,18 +114,19 @@ public class ReservationService {
 
     @Transactional
     public void getReservationCreatedEvent() {
-        List<ReservationCreatedEvent> reservationEventList = reservationCreatedEventRepository.findAllByReservationEventStatus(ReservationEventStatus.INIT);
+        List<ReservationCreatedEvent> reservationEventList = reservationCreatedEventRepository.findAllByReservationEventStatusAndCreatedAtBefore(ReservationEventStatus.INIT, LocalDateTime.now().minusMinutes(3));
         if (reservationEventList.size() > 0) {
             reservationEventList.stream().forEach(i -> {
+                if (i.getCreatedAt().isBefore(LocalDateTime.now().minusMinutes(10))) {
+                    slackApiClient.sendMessageToDeveloper(i.getReservationId());
+                    i.updateStatus(ReservationEventStatus.FAILED);
+                    return;
+                }
                 Reservation reservation = reservationRepository.findById(i.getReservationId()).orElseThrow(() -> {
                     throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "예약 정보가 없습니다.");
                 });
                 eventPublisher.publishEvent(new ReservationEvent(i.getReservationCreatedEventId(), reservation.getReservationSeats().stream().map(ReservationSeat::getSeatId).collect(
                     Collectors.toList())));
-                if (i.getCreatedAt().isBefore(LocalDateTime.now().minusMinutes(5))) {
-                    slackApiClient.sendMessageToDeveloper(i.getReservationId());
-                    i.updateStatus(ReservationEventStatus.FAILED);
-                }
             });
         }
     }
