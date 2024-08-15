@@ -7,6 +7,7 @@ import com.hhplus.concert.api.concert.domain.repository.ConcertRepository;
 import com.hhplus.concert.api.concert.domain.type.SeatStatus;
 import com.hhplus.concert.api.concert.domain.repository.ScheduleRepository;
 import com.hhplus.concert.api.concert.domain.repository.SeatRepository;
+import com.hhplus.concert.common.exception.list.CustomBadRequestException;
 import com.hhplus.concert.common.exception.list.CustomNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -101,10 +102,15 @@ public class ConcertService {
             log.info("[좌석 예약] 이미 예약된 좌석입니다.");
             throw new EntityNotFoundException("이미 예약된 좌석입니다.");
         }
+
+        if (seats.size() != seatIds.size()) {
+            log.info("[좌석 예약] 일부 좌석이 이미 예약된 상태입니다.");
+            throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "일부 좌석이 이미 예약된 상태입니다.");
+        }
+
         for (Seat seat : seats) {
             seat.updateSeatStatus(SeatStatus.IMPOSSIBLE, userId);
         }
-        seatRepository.saveAll(seats);
     }
 
 }
