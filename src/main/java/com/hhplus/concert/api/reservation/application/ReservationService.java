@@ -2,7 +2,11 @@ package com.hhplus.concert.api.reservation.application;
 
 import com.hhplus.concert.api.balance.application.BalanceService;
 import com.hhplus.concert.api.concert.domain.type.SeatStatus;
+import com.hhplus.concert.api.reservation.domain.entity.ReservationCreatedEvent;
 import com.hhplus.concert.api.reservation.domain.event.ReservationEvent;
+import com.hhplus.concert.api.reservation.domain.repository.ReservationCreatedEventRepository;
+import com.hhplus.concert.api.reservation.domain.type.ReservationEventStatus;
+import com.hhplus.concert.api.reservation.infrastructure.SlackApiClient;
 import com.hhplus.concert.api.token.application.TokenService;
 import com.hhplus.concert.api.concert.application.ConcertService;
 import com.hhplus.concert.api.reservation.domain.entity.PaymentHistory;
@@ -14,6 +18,7 @@ import com.hhplus.concert.api.reservation.domain.repository.ReservationSeatRepos
 import com.hhplus.concert.api.reservation.domain.type.PaymentStatus;
 import com.hhplus.concert.api.reservation.domain.type.ReservationStatus;
 import com.hhplus.concert.common.exception.list.CustomBadRequestException;
+import com.hhplus.concert.common.exception.list.CustomNotFoundException;
 import com.hhplus.concert.config.RedisLock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,6 +44,8 @@ public class ReservationService {
     private final ConcertService concertService;
     private final BalanceService balanceService;
     private final ApplicationEventPublisher eventPublisher;
+    private final ReservationCreatedEventRepository reservationCreatedEventRepository;
+    private final SlackApiClient slackApiClient;
 
     @CacheEvict(value = "seats: ", key = "#reservation.scheduleId")
     @Transactional
@@ -67,7 +74,9 @@ public class ReservationService {
                                                             .collect(Collectors.toList());
 
         reservationSeatRepository.saveAll(reservationSeats);
-        eventPublisher.publishEvent(new ReservationEvent(this, reservation, reservationSeats));
+        Long messageId = reservationCreatedEventRepository.save(new ReservationCreatedEvent(null, reservation.getReservationId(), ReservationEventStatus.INIT, LocalDateTime.now())).getReservationCreatedEventId();
+        eventPublisher.publishEvent(new ReservationEvent(messageId, reservation.getReservationSeats().stream().map(ReservationSeat::getSeatId).collect(
+            Collectors.toList())));
         return reservation;
     }
 
@@ -101,5 +110,31 @@ public class ReservationService {
         for (ReservationSeat reservationSeat : reservationSeats) {
             reservationSeat.updateReservationStatus(ReservationStatus.CANCEL);
         }
+    }
+
+    @Transactional
+    public void getReservationCreatedEvent() {
+        List<ReservationCreatedEvent> reservationEventList = reservationCreatedEventRepository.findAllByReservationEventStatus(ReservationEventStatus.INIT);
+        if (reservationEventList.size() > 0) {
+            reservationEventList.stream().forEach(i -> {
+                Reservation reservation = reservationRepository.findById(i.getReservationId()).orElseThrow(() -> {
+                    throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "예약 정보가 없습니다.");
+                });
+                eventPublisher.publishEvent(new ReservationEvent(i.getReservationCreatedEventId(), reservation.getReservationSeats().stream().map(ReservationSeat::getSeatId).collect(
+                    Collectors.toList())));
+                if (i.getCreatedAt().isBefore(LocalDateTime.now().minusMinutes(5))) {
+                    slackApiClient.sendMessageToDeveloper(i.getReservationId());
+                    i.updateStatus(ReservationEventStatus.FAILED);
+                }
+            });
+        }
+    }
+
+    @Transactional
+    public void reservationEventUpdate(ReservationEvent event) {
+        ReservationCreatedEvent reservationCreatedEvent = reservationCreatedEventRepository.findById(event.getMessageId()).orElseThrow(() -> {
+            throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "존재하지 않는 이벤트");
+        });
+        reservationCreatedEvent.updateStatus(ReservationEventStatus.PUBLISHED);
     }
 }

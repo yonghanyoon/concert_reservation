@@ -15,4 +15,9 @@ public class ReservationScheduler {
     public void processReservationExpired() {
         reservationService.reservationExpiredCheck();
     }
+
+    @Scheduled(fixedRate = 5000)
+    public void processKafkaPublish() {
+        reservationService.getReservationCreatedEvent();
+    }
 }
