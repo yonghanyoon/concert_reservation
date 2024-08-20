@@ -23,7 +23,7 @@ public class TokenService {
 
     public QueueToken createWaitingToken(QueueToken queueToken) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        if (tokenRedisRepository.zRank(queueToken.getUserId()) == null) {
+        if (tokenRedisRepository.zRank(queueToken.getUserId()) != null) {
             log.warn(String.format("[대기열 토큰 발급] userId : %d -> 이미 토큰이 발급된 사용자", queueToken.getUserId()));
             throw new CustomBadRequestException(HttpStatus.BAD_REQUEST, "이미 토큰이 발급된 사용자");
         }

@@ -11,6 +11,6 @@ public class KafkaReservationProducer {
     private final KafkaTemplate<String, ReservationEvent> kafkaTemplate;
 
     public void send(ReservationEvent event) {
-        kafkaTemplate.send("reservation-topic", "reservation", event);
+        kafkaTemplate.send("reservation-topic", String.valueOf(event.getReservation().getReservationId()), event);
     }
 }

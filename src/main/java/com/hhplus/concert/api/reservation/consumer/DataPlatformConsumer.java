@@ -13,7 +13,7 @@ public class DataPlatformConsumer {
 
     private final DataPlatformMockApiClient dataPlatformMockApiClient;
 
-    @KafkaListener(topics = "reservation-topic", groupId = "reservation-group1")
+    @KafkaListener(topics = "reservation-topic", groupId = "data-platform-group")
     public void handleEvent(ReservationEvent event, Acknowledgment acknowledgment) {
         dataPlatformMockApiClient.sendData(event.getSeatIds());
         acknowledgment.acknowledge();

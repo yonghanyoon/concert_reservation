@@ -59,9 +59,9 @@ public class KafkaContainerIntegrationTest {
     @Test
     public void handle_event_test() throws InterruptedException {
         // given
-        Long messageId = 1L;
+        String uuid = "cea83dbd-3549-467f-852c-86f9c5089cf0";
         List<Long> seatIds = Arrays.asList(1L, 2L, 3L);
-        ReservationEvent event = new ReservationEvent(messageId, seatIds);
+        ReservationEvent event = new ReservationEvent(uuid, seatIds);
 
         // when
         kafkaTemplate.send("reservation-test-topic", "reservation", event);
@@ -70,7 +70,7 @@ public class KafkaContainerIntegrationTest {
         boolean messageReceived = latch.await(10, TimeUnit.SECONDS);
         assertTrue(messageReceived);
         assertNotNull(reservationEvent);
-        assertEquals(1L, reservationEvent.getMessageId());
+        assertEquals(1L, reservationEvent.getUuid());
         assertEquals(Arrays.asList(1L, 2L, 3L), reservationEvent.getSeatIds());
     }
 }

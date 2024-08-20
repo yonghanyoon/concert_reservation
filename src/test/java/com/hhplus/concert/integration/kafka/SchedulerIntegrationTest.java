@@ -42,7 +42,7 @@ public class SchedulerIntegrationTest {
     public void outbox_scheduler_test() {
         // given
         // when
-        reservationService.getReservationCreatedEvent();
+        reservationService.processReservationEvent();
         // Then
         Optional<ReservationCreatedEvent> testEvent = reservationCreatedEventRepository.findById(messageId);
         assertThat(testEvent.get().getReservationEventStatus()).isEqualTo(ReservationEventStatus.FAILED);

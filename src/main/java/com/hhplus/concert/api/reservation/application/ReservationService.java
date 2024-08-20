@@ -23,6 +23,7 @@ import com.hhplus.concert.config.RedisLock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -74,9 +75,8 @@ public class ReservationService {
                                                             .collect(Collectors.toList());
 
         reservationSeatRepository.saveAll(reservationSeats);
-        Long messageId = reservationCreatedEventRepository.save(new ReservationCreatedEvent(null, reservation.getReservationId(), ReservationEventStatus.INIT, LocalDateTime.now())).getReservationCreatedEventId();
-        eventPublisher.publishEvent(new ReservationEvent(messageId, reservation.getReservationSeats().stream().map(ReservationSeat::getSeatId).collect(
-            Collectors.toList())));
+        String uuid = String.valueOf(UUID.randomUUID());
+        eventPublisher.publishEvent(new ReservationEvent(uuid, reservation));
         return reservation;
     }
 
@@ -113,7 +113,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public void getReservationCreatedEvent() {
+    public void processReservationEvent() {
         List<ReservationCreatedEvent> reservationEventList = reservationCreatedEventRepository.findAllByReservationEventStatusAndCreatedAtBefore(ReservationEventStatus.INIT, LocalDateTime.now().minusMinutes(3));
         if (reservationEventList.size() > 0) {
             reservationEventList.stream().forEach(i -> {
@@ -125,15 +125,14 @@ public class ReservationService {
                 Reservation reservation = reservationRepository.findById(i.getReservationId()).orElseThrow(() -> {
                     throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "예약 정보가 없습니다.");
                 });
-                eventPublisher.publishEvent(new ReservationEvent(i.getReservationCreatedEventId(), reservation.getReservationSeats().stream().map(ReservationSeat::getSeatId).collect(
-                    Collectors.toList())));
+                eventPublisher.publishEvent(new ReservationEvent(i.getReservationCreatedEventId(), reservation));
             });
         }
     }
 
     @Transactional
     public void reservationEventUpdate(ReservationEvent event) {
-        ReservationCreatedEvent reservationCreatedEvent = reservationCreatedEventRepository.findById(event.getMessageId()).orElseThrow(() -> {
+        ReservationCreatedEvent reservationCreatedEvent = reservationCreatedEventRepository.findById(event.getUuid()).orElseThrow(() -> {
             throw new CustomNotFoundException(HttpStatus.NOT_FOUND, "존재하지 않는 이벤트");
         });
         reservationCreatedEvent.updateStatus(ReservationEventStatus.PUBLISHED);

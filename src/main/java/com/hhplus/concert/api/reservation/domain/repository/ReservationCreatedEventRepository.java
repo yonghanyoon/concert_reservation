@@ -6,6 +6,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ReservationCreatedEventRepository extends JpaRepository<ReservationCreatedEvent, Long> {
+public interface ReservationCreatedEventRepository extends JpaRepository<ReservationCreatedEvent, String> {
     List<ReservationCreatedEvent> findAllByReservationEventStatusAndCreatedAtBefore(ReservationEventStatus reservationEventStatus, LocalDateTime createdAt);
 }
