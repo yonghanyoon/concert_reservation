@@ -3,25 +3,23 @@ package com.hhplus.concert.api.reservation.domain.event;
 import com.hhplus.concert.api.reservation.domain.entity.Reservation;
 import com.hhplus.concert.api.reservation.domain.entity.ReservationSeat;
 import java.util.List;
-import org.springframework.context.ApplicationEvent;
 
-public class ReservationEvent extends ApplicationEvent {
+public class ReservationEvent {
 
-    private final Reservation reservation;
-    private final List<ReservationSeat> reservationSeats;
-
-    public ReservationEvent(Object source, Reservation reservation,
-        List<ReservationSeat> reservationSeats) {
-        super(source);
-        this.reservation = reservation;
-        this.reservationSeats = reservationSeats;
+    private Long messageId;
+    private List<Long> seatIds;
+    public ReservationEvent() {
+    }
+    public ReservationEvent(Long messageId, List<Long> seatIds) {
+        this.messageId = messageId;
+        this.seatIds = seatIds;
     }
 
-    public Reservation getReservation() {
-        return reservation;
+    public Long getMessageId() {
+        return messageId;
     }
 
-    public List<ReservationSeat> getReservationSeats() {
-        return reservationSeats;
+    public List<Long> getSeatIds() {
+        return seatIds;
     }
 }

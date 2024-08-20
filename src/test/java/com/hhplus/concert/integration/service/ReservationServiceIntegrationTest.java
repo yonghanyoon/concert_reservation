@@ -6,12 +6,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.hhplus.concert.api.reservation.application.ReservationService;
 import com.hhplus.concert.api.reservation.domain.entity.PaymentHistory;
 import com.hhplus.concert.api.reservation.domain.entity.Reservation;
+import com.hhplus.concert.api.reservation.domain.entity.ReservationCreatedEvent;
 import com.hhplus.concert.api.reservation.domain.entity.ReservationSeat;
 import com.hhplus.concert.api.reservation.domain.repository.PaymentHistoryRepository;
+import com.hhplus.concert.api.reservation.domain.repository.ReservationCreatedEventRepository;
 import com.hhplus.concert.api.reservation.domain.repository.ReservationSeatRepository;
+import com.hhplus.concert.api.reservation.domain.type.ReservationEventStatus;
 import com.hhplus.concert.api.reservation.domain.type.ReservationStatus;
 import com.hhplus.concert.common.exception.list.CustomBadRequestException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -22,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.Rollback;
 
 @SpringBootTest
 public class ReservationServiceIntegrationTest {
@@ -32,6 +38,8 @@ public class ReservationServiceIntegrationTest {
     private ReservationSeatRepository reservationSeatRepository;
     @Autowired
     private PaymentHistoryRepository paymentHistoryRepository;
+    @Autowired
+    private ReservationCreatedEventRepository reservationCreatedEventRepository;
 
     @DisplayName("결제 히스토리 실패 테스트")
     @Test
@@ -129,5 +137,35 @@ public class ReservationServiceIntegrationTest {
         List<PaymentHistory> afterPaymentHistory = paymentHistoryRepository.findAllByReservationId(reservationId);
 
         assertEquals(1L, afterPaymentHistory.size());
+    }
+
+    @DisplayName("outbox 생성 테스트")
+    @Test
+    @Rollback
+    public void outbox_created_test() {
+        // given
+        List<ReservationSeat> reservationSeats = new ArrayList<>();
+        List<Long> seatIdList = Arrays.asList(1L, 2L, 3L);
+        for (Long seatId : seatIdList) {
+            ReservationSeat reservationSeat = new ReservationSeat().builder()
+                                                                   .seatId(seatId)
+                                                                   .scheduleId(1L)
+                                                                   .concertId(1L)
+                                                                   .build();
+            reservationSeats.add(reservationSeat);
+        }
+        Reservation reservation = new Reservation().builder()
+            .userId(2L)
+            .concertId(1L)
+            .scheduleId(1L)
+            .reservationSeats(reservationSeats)
+            .build();
+        // when
+        reservationService.postReservationSeat(reservation);
+
+        // then
+        List<ReservationCreatedEvent> reservationCreatedEvents = reservationCreatedEventRepository.findAllByReservationEventStatusAndCreatedAtBefore(
+            ReservationEventStatus.INIT, LocalDateTime.now());
+        assertEquals(reservationCreatedEvents.size(), 1);
     }
 }
