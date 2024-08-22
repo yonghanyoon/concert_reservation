@@ -68,11 +68,11 @@ public class TokenService {
     }
 
     public void tokenActive() {
-        Set<Object> activeTokens = tokenRedisRepository.zRange();
-        if (activeTokens.size() != 0) {
-            tokenRedisRepository.zRem(activeTokens);
+        Set<Object> waitingTokens = tokenRedisRepository.zRange();
+        if (waitingTokens.size() != 0) {
+            tokenRedisRepository.zRem(waitingTokens);
             log.info("[Waiting Tokens] : 제거");
-            tokenRedisRepository.addToSet(activeTokens);
+            tokenRedisRepository.addToSet(waitingTokens);
             log.info("[Active Tokens] : 입장");
         }
     }

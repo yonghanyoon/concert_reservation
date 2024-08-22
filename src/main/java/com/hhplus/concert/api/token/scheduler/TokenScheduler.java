@@ -14,7 +14,6 @@ public class TokenScheduler {
     @Scheduled(fixedDelay = 10000)
     public void processTokenExpired() {
         tokenService.tokenActive();
-//        tokenService.tokenExpiredCheck();
     }
 
 }
