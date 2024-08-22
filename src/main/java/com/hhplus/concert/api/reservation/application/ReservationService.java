@@ -48,7 +48,7 @@ public class ReservationService {
     private final ReservationCreatedEventRepository reservationCreatedEventRepository;
     private final SlackApiClient slackApiClient;
 
-    @CacheEvict(value = "seats: ", key = "#reservation.scheduleId")
+//    @CacheEvict(value = "seats: ", key = "#reservation.scheduleId")
     @Transactional
     public Reservation postReservationSeat(Reservation reservation) {
         List<Long> seatIds = reservation.getReservationSeats().stream()

@@ -56,7 +56,7 @@ public class ConcertService {
         return schedules;
     }
 
-    @Cacheable(value = "seats: ", key = "#scheduleId")
+//    @Cacheable(value = "seats: ", key = "#scheduleId")
     @Transactional(readOnly = true)
     public List<Seat> getSeats(Long scheduleId) {
         List<Seat> seats = seatRepository.findByScheduleIdAndSeatStatus(scheduleId,
