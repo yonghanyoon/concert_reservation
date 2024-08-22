@@ -56,6 +56,10 @@ public class TokenService {
         return new QueueToken(userId, position, waitingTime);
     }
 
+    public Boolean getTokenStatus(Long userId) {
+        return tokenRedisRepository.isMemberOfSet(userId);
+    }
+
     public void tokenActiveCheck(Long userId) {
         if (!tokenRedisRepository.isMemberOfSet(userId)) {
             throw new CustomForbiddenException(HttpStatus.FORBIDDEN, "접근 권한 없음");

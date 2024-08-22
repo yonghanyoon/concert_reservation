@@ -22,13 +22,13 @@ public class ReservationMapper {
             ReservationSeat reservationSeat = new ReservationSeat().builder()
                 .seatId(seatId)
                 .scheduleId(dto.getScheduleId())
-                .concertId(dto.getContentId())
+                .concertId(dto.getConcertId())
                 .build();
             reservationSeats.add(reservationSeat);
         }
         Reservation reservation = new Reservation().builder()
             .userId(dto.getUserId())
-            .concertId(dto.getContentId())
+            .concertId(dto.getConcertId())
             .scheduleId(dto.getScheduleId())
             .reservationSeats(reservationSeats)
             .build();

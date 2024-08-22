@@ -40,4 +40,11 @@ public class TokenController {
     public ResponseEntity<TokenResDTO> getToken(@PathVariable Long userId) {
         return ResponseEntity.ok(TokenMapper.toDto(tokenService.getWaitingToken(userId)));
     }
+
+    // 유저 대기열 활성화 체크 API
+    @Operation(summary = "유저 대기열 활성화 체크 API")
+    @GetMapping("/status/{userId}")
+    public ResponseEntity<Boolean> getTokenStatus(@PathVariable Long userId) {
+        return ResponseEntity.ok(tokenService.getTokenStatus(userId));
+    }
 }

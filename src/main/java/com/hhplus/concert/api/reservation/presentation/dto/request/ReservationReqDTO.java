@@ -16,7 +16,7 @@ public class ReservationReqDTO {
     @Schema(description = "사용자 ID")
     private Long userId;
     @Schema(description = "콘서트 ID")
-    private Long contentId;
+    private Long concertId;
     @Schema(description = "날짜 ID")
     private Long scheduleId;
     @Schema(description = "예약 좌석 리스트")
