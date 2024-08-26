@@ -1,5 +1,7 @@
 # 콘서트 예약 서비스
 
+### [장애대응 및 부하테스트 보고서](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/load_test.md)
+-----
 ### [MSA 보고서](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/msa.md)
 -----
 ### [index 보고서](https://github.com/yonghanyoon/concert_reservation/blob/main/Docs/index.md)
