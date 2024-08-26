@@ -18,6 +18,6 @@ public class ReservationScheduler {
 
     @Scheduled(fixedRate = 5000)
     public void processKafkaPublish() {
-        reservationService.getReservationCreatedEvent();
+        reservationService.processReservationEvent();
     }
 }

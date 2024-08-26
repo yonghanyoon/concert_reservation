@@ -21,9 +21,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "RESERVATION_CREATED_EVENT")
 public class ReservationCreatedEvent {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RESERVATION_CREATED_EVENT_ID")
-    private Long reservationCreatedEventId;
+    private String reservationCreatedEventId;
     @Column(name = "RESERVATION_ID")
     private Long reservationId;
     @Column(name = "RESERVATION_EVENT_STATUS")

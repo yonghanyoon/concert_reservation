@@ -47,10 +47,6 @@ public class TokenRedisRepository {
         return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(activeKey, value));
     }
 
-    public Set<String> getAllMembers() {
-        return setRedisTemplate.opsForSet().members(activeKey);
-    }
-
     public void removeMember(String value) {
         setRedisTemplate.opsForSet().remove(activeKey, value);
     }

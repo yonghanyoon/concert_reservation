@@ -34,9 +34,9 @@ public class EmbeddedKafkaIntegrationTest {
     @Test
     public void handle_event_test() throws InterruptedException {
         // given
-        Long messageId = 1L;
+        String uuid = "cea83dbd-3549-467f-852c-86f9c5089cf0";
         List<Long> seatIds = Arrays.asList(1L, 2L, 3L);
-        ReservationEvent event = new ReservationEvent(messageId, seatIds);
+        ReservationEvent event = new ReservationEvent(uuid, seatIds);
 
         // when
         kafkaTemplate.send("reservation-test-topic", "reservation", event);
@@ -45,7 +45,7 @@ public class EmbeddedKafkaIntegrationTest {
         Thread.sleep(2000);
         assertEquals(dataPlatformMockApiClient.sendData(seatIds), true);
         assertNotNull(reservationEvent);
-        assertEquals(1L, reservationEvent.getMessageId());
+        assertEquals(1L, reservationEvent.getUuid());
         assertEquals(Arrays.asList(1L, 2L, 3L), reservationEvent.getSeatIds());
     }
 }

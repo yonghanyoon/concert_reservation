@@ -6,20 +6,32 @@ import java.util.List;
 
 public class ReservationEvent {
 
-    private Long messageId;
+    private String uuid;
     private List<Long> seatIds;
+    private Reservation reservation;
+
     public ReservationEvent() {
     }
-    public ReservationEvent(Long messageId, List<Long> seatIds) {
-        this.messageId = messageId;
+    public ReservationEvent(String uuid, List<Long> seatIds) {
+        this.uuid = uuid;
         this.seatIds = seatIds;
     }
 
-    public Long getMessageId() {
-        return messageId;
+    public ReservationEvent(String uuid, Reservation reservation) {
+        this.uuid = uuid;
+        this.seatIds = reservation.getReservationSeats().stream().map(ReservationSeat::getSeatId).toList();
+        this.reservation = reservation;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public List<Long> getSeatIds() {
         return seatIds;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
     }
 }

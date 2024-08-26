@@ -37,9 +37,9 @@ public class ConcertController {
 
     // 예약 가능 날짜 조회 API
     @Operation(summary = "예약 가능 날짜 조회 API")
-    @GetMapping("/schedules/{contentId}")
-    public ResponseEntity<List<ScheduleResDTO>> getSchedules(@RequestHeader Long userId, @PathVariable Long contentId) {
-        return ResponseEntity.ok(ConcertMapper.toDtoFromSchedule(concertService.getSchedules(contentId)));
+    @GetMapping("/schedules/{concertId}")
+    public ResponseEntity<List<ScheduleResDTO>> getSchedules(@RequestHeader Long userId, @PathVariable Long concertId) {
+        return ResponseEntity.ok(ConcertMapper.toDtoFromSchedule(concertService.getSchedules(concertId)));
     }
 
     // 해당 날짜 예약 가능 좌석 조회 API
